@@ -14,7 +14,7 @@ description: 一本关于安全学习历程的书。
 
 @Github：[FunctFan](https://github.com/FunctFan)
 
-@GitBook: [javasec.org](http://javasec.org/)
+@GitBook: [functfan.gitbook.io/gewuzz/](https://functfan.gitbook.io/gewuzz/)
 
 @Date 2020-05-21
 
