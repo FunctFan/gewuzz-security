@@ -139,9 +139,46 @@ description: what is xxe vulnerability
 >      <lolz>&lol9;</lolz
 > ```
 
-\*\*\*\*
+## **如何防御**
 
-       
+### **方案一：使用语言中推荐的禁用外部实体的方法**
+
+**PHP：**
+
+```php
+libxml_disable_entity_loader(true);
+```
+
+**JAVA:**
+
+```java
+DocumentBuilderFactory dbf =DocumentBuilderFactory.newInstance();
+dbf.setExpandEntityReferences(false);
+.setFeature("http://apache.org/xml/features/disallow-doctype-decl",true);
+.setFeature("http://xml.org/sax/features/external-general-entities",false)
+.setFeature("http://xml.org/sax/features/external-parameter-entities",false);
+```
+
+**Python：**
+
+```python
+from lxml import etree
+xmlData = etree.parse(xmlSource,etree.XMLParser(resolve_entities=False))
+```
+
+### **方案二：手动黑名单过滤\(不推荐\)**
+
+过滤关键词：
+
+```text
+<!DOCTYPE、<!ENTITY SYSTEM、PUBLIC     
+```
+
+## 总结
+
+对 XXE 漏洞做了一个重新的认识，对其中一些细节问题做了对应的实战测试，重点在于 netdoc 的利用和 jar 协议的利用，这个 jar 协议的使用很神奇，网上的资料也比较少，我测试也花了很长的时间，希望有真实的案例能出现，利用方式还需要各位大师傅们的努力挖掘。
+
+你的知识面，决定着你的攻击面。
 
 ## 参考文献
 
