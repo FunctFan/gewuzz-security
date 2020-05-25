@@ -10,11 +10,23 @@ description: 一本关于安全学习历程的书。
 
 尽管我在写文章的时候已尽可能的避免出现错误或问题，但难免会有描述不清或者错误的地方，如果您在阅读文章的时候发现任何问题都可以通过以下方式与我联系，欢迎大家一起交流。
 
-@Author：FunctFan，Beijing University of Technology，working in xxx security lab
+{% tabs %}
+{% tab title="@Author" %}
+FunctFan，Beijing University of Technology，working in xxx security lab
+{% endtab %}
 
-@Github：[FunctFan](https://github.com/FunctFan)
+{% tab title="@Github" %}
+{% embed url="https://github.com/FunctFan" %}
+{% endtab %}
 
-@GitBook: [functfan.gitbook.io/gewuzz/](https://functfan.gitbook.io/gewuzz/)
+{% tab title="@Gitbook" %}
+{% embed url="https://functfan.gitbook.io/gewuzz/" %}
+{% endtab %}
 
-@Date 2020-05-21
+{% tab title="@Blog" %}
+{% embed url="https://bleke.top" %}
+{% endtab %}
+{% endtabs %}
+
+@Date  FunctFan created at 2020-05-21
 
