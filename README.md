@@ -12,7 +12,7 @@ description: 一本关于安全学习历程的书。
 
 {% tabs %}
 {% tab title="@Author" %}
-FunctFan，Beijing University of Technology，working in xxx security lab
+{% embed url="https://bleke.top/about" %}
 {% endtab %}
 
 {% tab title="@Github" %}
