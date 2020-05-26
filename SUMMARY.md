@@ -1,8 +1,6 @@
 # Table of contents
 
 * [写在前面](README.md)
-* [漏洞挖掘](lou-dong-wa-jue/README.md)
-  * [小白入门](lou-dong-wa-jue/xiao-bai-ru-men.md)
 * [java安全](java-an-quan/README.md)
   * [反序列化漏洞](java-an-quan/fan-xu-lie-hua-lou-dong/README.md)
     * [序列化/反~](java-an-quan/fan-xu-lie-hua-lou-dong/xu-lie-hua-fan.md)
@@ -11,4 +9,13 @@
     * [XXE爱之初印象](java-an-quan/xxe-lou-dong/xxe-ai-zhi-chu-yin-xiang.md)
     * [XXE漏洞写法及防御](java-an-quan/xxe-lou-dong/xxe-lou-dong-xie-fa-ji-fang-yu.md)
     * [XXExploiter工具](java-an-quan/xxe-lou-dong/xxexploiter-gong-ju.md)
+* [漏洞挖掘](lou-dong-wa-jue/README.md)
+  * [小白入门](lou-dong-wa-jue/xiao-bai-ru-men.md)
+* [漏洞复现](lou-dong-fu-xian/README.md)
+  * [操作系统](lou-dong-fu-xian/cao-zuo-xi-tong/README.md)
+    * [windows](lou-dong-fu-xian/cao-zuo-xi-tong/windows.md)
+    * [Linux](lou-dong-fu-xian/cao-zuo-xi-tong/linux.md)
+  * [数据库](lou-dong-fu-xian/shu-ju-ku.md)
+  * [WEB服务组件](lou-dong-fu-xian/web-fu-wu-zu-jian/README.md)
+    * [Apache Solr 远程命令执行漏洞（CVE-2019-0193）](lou-dong-fu-xian/web-fu-wu-zu-jian/apache-solr-yuan-cheng-ming-ling-zhi-hang-lou-dong-cve20190193.md)
 
