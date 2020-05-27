@@ -6,7 +6,7 @@ description: CVE-2019-0193
 
 以下内容来自「[是大方子-Apache Solr 远程命令执行漏洞（CVE-2019-0193）](https://note.youdao.com/ynoteshare1/index.html?id=59ba4b4d77327e0b12cfb9a67f114956&type=note)」，我看了他写的复现报告之后，认为写的还可以，并搭建环境完成了复现，具体内容如下：
 
-## 正文
+## 0x00 准备工作
 
 漏洞环境可以采用vulhub的github：
 
@@ -17,17 +17,25 @@ description: CVE-2019-0193
 * [https://mp.weixin.qq.com/s/typLOXZCev\_9WH\_Ux0s6oA](https://mp.weixin.qq.com/s/typLOXZCev_9WH_Ux0s6oA)
 * [https://paper.seebug.org/1009/](https://paper.seebug.org/1009/)
 
+## 0x01 Solr简介
+
+Solr是一个独立的企业级搜索应用服务器，它对外提供类似于Web-service的API接口。用户可以通过http请求，向搜索引擎服务器提交一定格式的XML文件，生成索引；也可以通过Http Get操作提出查找请求，并得到XML格式的返回结果。
+
+## 0x02 漏洞概述
+
 Apache Solr 是一个开源的搜索服务器。Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现。此次漏洞出现在Apache Solr的DataImportHandler，该模块是一个可选但常用的模块，用于从数据库和其他源中提取数据。它具有一个功能，其中所有的DIH配置都可以通过外部请求的dataConfig参数来设置。由于DIH配置可以包含脚本，因此攻击者可以通过构造危险的请求，从而造成远程命令执行。本环境测试RCE漏洞。  
   
-漏洞影响范围：Apache Solr &lt;= 8.2.0  
-漏洞环境  
+漏洞影响范围：Apache Solr &lt;= 8.2.0，Apache Solr 5.x - 8.2.0，存在config API版本
+
+## 0x03 漏洞环境
+
 运行漏洞环境：
 
 ```text
 docker-compose up -d
 ```
 
-```text
+```bash
 docker-compose exec solr bash bin/solr create_core -c test -d example/example-DIH/solr/db
 ```
 
@@ -45,8 +53,9 @@ http://10.26.231.203:8983/solr/#/
 http://10.26.231.203:8983/solr/test/config
 ```
 
-抓包并修改发送方式  
-然后利用s00py公布的poc修改向config发送json配置继续修改
+## 0x04 漏洞复现
+
+访问上述网址并抓包并修改发送方式为POST，然后利用s00py公布的poc修改向config发送json配置继续修改
 
 ```text
 {
@@ -61,7 +70,9 @@ http://10.26.231.203:8983/solr/test/config
 }
 ```
 
-这2个位置要修改
+{% hint style="danger" %}
+注意：图示这2个位置要修改
+{% endhint %}
 
 ![](../../.gitbook/assets/image%20%284%29.png)
 
