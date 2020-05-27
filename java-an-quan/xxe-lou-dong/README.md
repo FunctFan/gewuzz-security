@@ -10,5 +10,11 @@ description: xml实体攻击是怎么一回事
 
 ## 传送门
 
+* [XXE爱之初印象](https://app.gitbook.com/@functfan/s/gewuzz/~/drafts/-M8JuC-N4SrAZJzgRE7f/java-an-quan/xxe-lou-dong/xxe-ai-zhi-chu-yin-xiang)
+* [XXE漏洞写法及防御](https://app.gitbook.com/@functfan/s/gewuzz/~/drafts/-M8JuC-N4SrAZJzgRE7f/java-an-quan/xxe-lou-dong/xxe-lou-dong-xie-fa-ji-fang-yu)
+* [XXExploiter工具](https://app.gitbook.com/@functfan/s/gewuzz/~/drafts/-M8JuC-N4SrAZJzgRE7f/java-an-quan/xxe-lou-dong/xxexploiter-gong-ju)
+
+
+
 
 

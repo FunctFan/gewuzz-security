@@ -10,5 +10,3 @@ description: 'to serialization or deserialization,that is a question'
 * [Ysoserial工具](https://app.gitbook.com/@functfan/s/gewuzz/~/drafts/-M8JeWpoUK1hHo_exdzV/java-an-quan/fan-xu-lie-hua-lou-dong/ysoserial)
 * [Marshalsec工具](https://app.gitbook.com/@functfan/s/gewuzz/~/drafts/-M8JeWpoUK1hHo_exdzV/java-an-quan/fan-xu-lie-hua-lou-dong/marshalsec)
 
-
-
