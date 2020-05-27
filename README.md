@@ -26,6 +26,10 @@ description: 一本关于安全学习历程的书。
 {% tab title="@Blog" %}
 {% embed url="https://bleke.top" %}
 {% endtab %}
+
+{% tab title="@CSDN" %}
+{% embed url="https://blog.csdn.net/RisingFan" %}
+{% endtab %}
 {% endtabs %}
 
 @Date  FunctFan created at 2020-05-21
