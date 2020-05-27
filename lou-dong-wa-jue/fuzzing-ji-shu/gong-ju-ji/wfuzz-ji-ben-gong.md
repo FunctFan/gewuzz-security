@@ -6,6 +6,10 @@ description: Web application fuzzer
 
 以下内容来自「[安全脉搏key师傅--Wfuzz基本功](https://www.secpulse.com/archives/81560.html)」，如有侵权，请及时联系我删除！
 
+工具GitHub地址：
+
+        [https://github.com/xmendez/wfuzz](https://github.com/xmendez/wfuzz)
+
 ## 爆破文件、目录
 
 wfuzz本身自带字典：
