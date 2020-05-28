@@ -2,7 +2,7 @@
 description: afl
 ---
 
-# AFL
+# AFL-基于变异的fuzz工具
 
 ## [https://www.freebuf.com/articles/system/191543.html](https://www.freebuf.com/articles/system/191543.html)（参考）
 

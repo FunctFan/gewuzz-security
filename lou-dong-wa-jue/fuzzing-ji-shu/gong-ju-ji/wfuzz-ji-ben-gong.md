@@ -2,7 +2,7 @@
 description: Web application fuzzer
 ---
 
-# wfuzz基本功
+# wfuzz-web app fuzzer
 
 以下内容来自「[安全脉搏key师傅--Wfuzz基本功](https://www.secpulse.com/archives/81560.html)」，如有侵权，请及时联系我删除！
 
