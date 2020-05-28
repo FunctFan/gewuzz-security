@@ -10,6 +10,8 @@ description: You don't have 0day?try fuzzing technologies! That's so crazy!
 
 Fuzzing是指通过构造测试输入，对软件进行大量测试来发现软件中的漏洞的一种模糊测试方法。在CTF比赛中，fuzzing可能不常用，但在现实的漏洞挖掘中，fuzzing因其简单高效的优势，成为非常主流的漏洞挖掘方法。
 
+Fuzzing通常由盲fuzzing（blind fuzzing）和导向性fuzzing（guided fuzzing）两种。blind fuzzing生成测试数据的时候不考虑数据的质量，通过大量测试数据来概率性地触发漏洞。Guided fuzzing则关注测试数据的质量，期望生成更有效的测试数据来触发漏洞的概率。比如，通过测试覆盖率来衡量测试输入的质量，希望生成有更高测试覆盖率的数据，从而提升触发漏洞的概率。
+
 ## 听听大牛怎么说fuzzing
 
 {% hint style="info" %}
