@@ -4,6 +4,18 @@ description: the tools of fuzzing
 
 # 工具集
 
+## 现有工具
+
+| 二进制程序fuzz工具 | [PTFuzzer：一个基于硬件加速的二进制程序Fuzz工具](https://www.freebuf.com/sectool/177578.html) |
+| :--- | :--- |
+| 浏览器fuzz工具 | [X-Fuzzer – 动态浏览器Fuzz工具](https://www.freebuf.com/sectool/5453.html) |
+| 浏览器fuzz工具 | grinder—自动化浏览器fuzz框架 |
+| 浏览器fuzz工具 |  |
+| webywedfdkfjldfjdsfsdsad | ffuf—Go语言编写的高速Web Fuzzer工具 |
+| fdfd fdfd |  |
+
+
+
 AFL是目前最受欢迎的一个工具，是一个导向型的fuzzing工具。 
 
 AFL这个工具出来的一个起因就是AFL的开发者认为盲fuzzing的效率是比较低的；第二个原因就是Charlie Miller和Laurent Gaffié所做的样本筛选的方法是有效果的；还有第三个原因就是符号执行，符号执行在理论是非常不错的，但在实际中经常受到可行性、性能等方面的限制。于是在这样一个背景下，AFL出现了。

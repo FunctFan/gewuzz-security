@@ -28,6 +28,7 @@
     * [Apache Solr 远程命令执行漏洞（CVE-2019-0193）](lou-dong-fu-xian/web-fu-wu-zu-jian/apache-solr-yuan-cheng-ming-ling-zhi-hang-lou-dong-cve20190193.md)
 * [新技术研究](xin-ji-shu-yan-jiu/README.md)
   * [云原生安全](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan.md)
+  * [联邦安全](xin-ji-shu-yan-jiu/lian-bang-an-quan.md)
   * [云边协同](xin-ji-shu-yan-jiu/yun-bian-xie-tong.md)
   * [安全多方计算](xin-ji-shu-yan-jiu/an-quan-duo-fang-ji-suan.md)
 
