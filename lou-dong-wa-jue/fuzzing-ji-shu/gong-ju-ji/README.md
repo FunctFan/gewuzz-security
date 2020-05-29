@@ -4,21 +4,20 @@ description: the tools of fuzzing
 
 # 工具集
 
-## 现有工具
+## 主流工具
 
+| **工具类型** | **代表工具** |
+| :---: | :---: |
 | 二进制程序fuzz工具 | [PTFuzzer：一个基于硬件加速的二进制程序Fuzz工具](https://www.freebuf.com/sectool/177578.html) |
-| :--- | :--- |
 | 浏览器fuzz工具 | [X-Fuzzer – 动态浏览器Fuzz工具](https://www.freebuf.com/sectool/5453.html) |
 | 浏览器fuzz工具 | grinder—自动化浏览器fuzz框架 |
-| 浏览器fuzz工具 |  |
-| webywedfdkfjldfjdsfsdsad | ffuf—Go语言编写的高速Web Fuzzer工具 |
-| fdfd fdfd |  |
-
-
-
-AFL是目前最受欢迎的一个工具，是一个导向型的fuzzing工具。 
-
-AFL这个工具出来的一个起因就是AFL的开发者认为盲fuzzing的效率是比较低的；第二个原因就是Charlie Miller和Laurent Gaffié所做的样本筛选的方法是有效果的；还有第三个原因就是符号执行，符号执行在理论是非常不错的，但在实际中经常受到可行性、性能等方面的限制。于是在这样一个背景下，AFL出现了。
-
-AFL有两个关键词：指令插桩和边覆盖。首先AFL是基于插桩的，能够辅助程序分析；其次AFL是基于边覆盖的，是对Charlie Miller等人基于块覆盖用样本筛选的一个改进和提升。
+| 浏览器fuzz工具 | cross\_fuzz |
+| web应用fuzz工具 | ffuf—Go语言编写的高速Web Fuzzer工具 |
+| web应用fuzz工具 | wfuzz—web应用fuzz工具 |
+| web应用fuzz工具 | tmnt-Web应用漏洞fuzzer |
+| 安卓应用程序fuzz工具 | [DAFF：Android应用程序Fuzzing框架](https://www.freebuf.com/sectool/164794.html) |
+| 安卓驱动fuzzing | DeathFuzzer |
+| 协议fuzzing工具 | [Kitty：Python语言编写的Fuzzing框架](https://www.freebuf.com/sectool/99895.html) |
+| 文件fuzzing工具 | AFL |
+| 针对java文件的fuzz工具 |  [java-afl](https://github.com/FunctFan/java-afl) |
 
