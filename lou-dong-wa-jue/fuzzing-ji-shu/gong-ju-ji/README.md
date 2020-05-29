@@ -20,4 +20,5 @@ description: the tools of fuzzing
 | 协议fuzzing工具 | [Kitty：Python语言编写的Fuzzing框架](https://www.freebuf.com/sectool/99895.html) |
 | 文件fuzzing工具 | [AFL](https://www.freebuf.com/articles/system/191543.html) |
 | 针对java文件的fuzz工具 |  [java-afl](https://github.com/FunctFan/java-afl) |
+| 针对java程序的fuzz工具 |  [kelinci](https://github.com/FunctFan/kelinci)-AFL-based fuzzing for Java |
 
