@@ -1,3 +1,7 @@
+---
+description: priorityQueue+BeanComparator+Java泛型的类型擦除+TemplatesImpl
+---
+
 # Java反序列化之Commons beanUtils
 
 以下内容引自「大专栏」发表于 2020-03-18的「[ysoserial分析系列：一步步写Commons beanUtils利用](https://www.dazhuanlan.com/2020/03/18/5e71a8fec8f35/)」，具体内容已经是精简后的版本：
@@ -104,5 +108,10 @@ ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename));
 ois.readObject();
 ```
 
+## 参考文献
 
-
+* Java 反序列化之 CommonsBeanUtils 分析：[https://blog.knownsec.com/2016/03/java-deserialization-commonsbeanutils-pop-chains-analysis/](https://blog.knownsec.com/2016/03/java-deserialization-commonsbeanutils-pop-chains-analysis/)
+* Java泛型的类型擦除：[https://www.cnblogs.com/joeblackzqq/p/10813143.html](https://www.cnblogs.com/joeblackzqq/p/10813143.html)
+* ComparatorChain、BeanComparator用法示例\(枚举类型排序转）：[https://www.cnblogs.com/zhangmingcheng/p/5737593.html](https://www.cnblogs.com/zhangmingcheng/p/5737593.html)
+* java反序列化工具ysoserial分析 – angelwhu：[http://www.vuln.cn/6295](http://www.vuln.cn/6295)
+* 
