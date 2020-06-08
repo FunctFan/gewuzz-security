@@ -1,6 +1,6 @@
 # Java反序列化之Commons-Collections
 
- 以下内容引自CSDN「Badcode」在其「[Java反序列化之Commons-Collections](https://badcode.cc/2018/03/15/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BCommons-Collections/)」的博文，具体内容已经是精简后的版本：
+以下内容引自CSDN「Badcode」在其「[Java反序列化之Commons-Collections](https://badcode.cc/2018/03/15/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8BCommons-Collections/)」的博文，具体内容已经是精简后的版本：
 
 ## Apache Commons-Collections 简介
 

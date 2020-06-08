@@ -5,6 +5,7 @@
   * [反序列化漏洞](java-an-quan/fan-xu-lie-hua-lou-dong/README.md)
     * [序列化/反~](java-an-quan/fan-xu-lie-hua-lou-dong/xu-lie-hua-fan.md)
     * [Ysoserial](java-an-quan/fan-xu-lie-hua-lou-dong/ysoserial/README.md)
+      * [Java反序列化之Commons beanUtils](java-an-quan/fan-xu-lie-hua-lou-dong/ysoserial/java-fan-xu-lie-hua-zhi-commons-beanutils.md)
       * [Java反序列化之Commons-Collections](java-an-quan/fan-xu-lie-hua-lou-dong/ysoserial/java-fan-xu-lie-hua-zhi-commonscollections.md)
     * [Marshalsec](java-an-quan/fan-xu-lie-hua-lou-dong/marshalsec.md)
   * [XXE漏洞](java-an-quan/xxe-lou-dong/README.md)
