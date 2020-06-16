@@ -114,4 +114,5 @@ ois.readObject();
 * Java泛型的类型擦除：[https://www.cnblogs.com/joeblackzqq/p/10813143.html](https://www.cnblogs.com/joeblackzqq/p/10813143.html)
 * ComparatorChain、BeanComparator用法示例\(枚举类型排序转）：[https://www.cnblogs.com/zhangmingcheng/p/5737593.html](https://www.cnblogs.com/zhangmingcheng/p/5737593.html)
 * java反序列化工具ysoserial分析 – angelwhu：[http://www.vuln.cn/6295](http://www.vuln.cn/6295)
-* 
+* [ysoserial分析系列：一步步写Commons beanUtils利用](https://www.dazhuanlan.com/2020/03/18/5e71a8fec8f35/)
+
