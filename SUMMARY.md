@@ -12,6 +12,8 @@
         * [CommonsCollections3](java-an-quan/fan-xu-lie-hua-lou-dong/ysoserial/java-fan-xu-lie-hua-zhi-commonscollections/commonscollections3.md)
         * [CommonsCollections4](java-an-quan/fan-xu-lie-hua-lou-dong/ysoserial/java-fan-xu-lie-hua-zhi-commonscollections/commonscollections4.md)
         * [CommonsCollections5](java-an-quan/fan-xu-lie-hua-lou-dong/ysoserial/java-fan-xu-lie-hua-zhi-commonscollections/commonscollections5.md)
+        * [CommonsCollections6](java-an-quan/fan-xu-lie-hua-lou-dong/ysoserial/java-fan-xu-lie-hua-zhi-commonscollections/commonscollections6.md)
+        * [CommonsCollections7](java-an-quan/fan-xu-lie-hua-lou-dong/ysoserial/java-fan-xu-lie-hua-zhi-commonscollections/commonscollections7.md)
     * [Marshalsec](java-an-quan/fan-xu-lie-hua-lou-dong/marshalsec.md)
   * [XXE漏洞](java-an-quan/xxe-lou-dong/README.md)
     * [XXE爱之初印象](java-an-quan/xxe-lou-dong/xxe-ai-zhi-chu-yin-xiang.md)

