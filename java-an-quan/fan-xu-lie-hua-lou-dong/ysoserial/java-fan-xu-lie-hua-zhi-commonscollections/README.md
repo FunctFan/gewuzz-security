@@ -335,6 +335,40 @@ public class CommonsCollectionPayload {
 }
 ```
 
+## 总结
+
+通过对ysoserial中关于CommonsCollection的七个利用方式的分析我们可以对可以利用的恶意类做一个总结：
+
+### 四大Tranformer的tranform方法的作用
+
+> 1.ChainedTransformer：循环调用成员变量iTransformers数组的中ransformer中的tranform方法。
+>
+> 2.InvokerTransformer： 通过反射的方法调用传入tranform方法中的inuput对象的方法（方法通过成员变量iMethodName设置，参数通过成员变量iParamTypes设置）
+>
+> 3.ConstantTransformer：返回成员变量iConstant的值。
+>
+> 4.InstantiateTransformer：通过反射的方法返回传入参数input的实力。（构造函数的参数通过成员变量iArgs传入，参数类型通过成员变量iParamTypes传入）
+
+### 三大Map的作用
+
+> 1.lazyMap：通过调用lazyMap的get方法可以触发它的成员变量factory的tranform方法，用来和上一节中的Tranformer配合使用。
+>
+> 2.TiedMapEntry：通过调用TiedMapEntry的getValue方法实现对他的成员变量map的get方法的调用，用来和lazyMap配合使用。
+>
+> 3.HashMap：通过调用HashMap的put方法实现对成员变量hashCode方法的调用，用来和TiedMapEntry配合使用（TiedMapEntry的hashCode函数会再去调自身的getValue）。
+
+### 五大反序列化利用基类
+
+> 1.AnnotationInvocationHandler：反序列化的时候会循环调用成员变量的get方法，用来和lazyMap配合使用。
+>
+> 2.PriorityQueue：反序列化的时候会调用TransformingComparator中的transformer的tranform方法，用来直接和Tranformer配合使用。
+>
+> 3.BadAttributeValueExpException：反序列化的时候会去调用成员变量val的toString函数，用来和TiedMapEntry配合使用。（TiedMapEntry的toString函数会再去调自身的getValue）。
+>
+> 4.HashSet：反序列化的时候会去循环调用自身map中的put方法，用来和HashMap配合使用。
+>
+> 5.Hashtable：当里面包含2个及以上的map的时候，回去循环调用map的get方法，用来和lazyMap配合使用。
+
 ## 参考文献
 
 * [java反序列化漏洞原理分析](http://www.angelwhu.com/blog/?p=394)

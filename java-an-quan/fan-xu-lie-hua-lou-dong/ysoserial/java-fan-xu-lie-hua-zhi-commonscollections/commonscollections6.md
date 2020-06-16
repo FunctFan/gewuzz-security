@@ -1,3 +1,7 @@
+---
+description: HashSet在反序列化的时候会去循环调用自身map中的put方法
+---
+
 # CommonsCollections6
 
 PayLoad:
