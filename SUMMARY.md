@@ -9,6 +9,7 @@
       * [Java反序列化之Commons-Collections](java-an-quan/fan-xu-lie-hua-lou-dong/ysoserial/java-fan-xu-lie-hua-zhi-commonscollections/README.md)
         * [CommonsCollections1](java-an-quan/fan-xu-lie-hua-lou-dong/ysoserial/java-fan-xu-lie-hua-zhi-commonscollections/commonscollections1.md)
         * [CommonsCollections2](java-an-quan/fan-xu-lie-hua-lou-dong/ysoserial/java-fan-xu-lie-hua-zhi-commonscollections/commonscollections2.md)
+        * [CommonsCollections3](java-an-quan/fan-xu-lie-hua-lou-dong/ysoserial/java-fan-xu-lie-hua-zhi-commonscollections/commonscollections3.md)
     * [Marshalsec](java-an-quan/fan-xu-lie-hua-lou-dong/marshalsec.md)
   * [XXE漏洞](java-an-quan/xxe-lou-dong/README.md)
     * [XXE爱之初印象](java-an-quan/xxe-lou-dong/xxe-ai-zhi-chu-yin-xiang.md)
