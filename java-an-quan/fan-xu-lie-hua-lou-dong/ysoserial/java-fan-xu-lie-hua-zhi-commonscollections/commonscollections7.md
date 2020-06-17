@@ -1,6 +1,6 @@
 ---
 description: >-
-  把lazyMap作为key传入到hashset或者hashtable的时候往往都会对lazyMap本身的map参数造成一定影响包含2个及以上的map的时候，回去循环调用map的get方法
+  把lazyMap作为key传入到hashset或者hashtable的时候往往都会对lazyMap本身的map参数造成一定影响，当包含2个及以上的map的时候，会去循环调用map的get方法
 ---
 
 # CommonsCollections7

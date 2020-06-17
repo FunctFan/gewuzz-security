@@ -374,5 +374,4 @@ public class CommonsCollectionPayload {
 * [java反序列化漏洞原理分析](http://www.angelwhu.com/blog/?p=394)
 * [JAVA反序列化漏洞知识点整理](http://www.beesfun.com/2017/05/07/JAVA%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/)
 * [Lib之过？Java反序列化漏洞通用利用分析](https://blog.chaitin.cn/2015-11-11_java_unserialize_rce/)
-* [玩转Ysoserial-CommonsCollection的七种利用方式分析](https://www.freebuf.com/articles/web/214096.html)
 
