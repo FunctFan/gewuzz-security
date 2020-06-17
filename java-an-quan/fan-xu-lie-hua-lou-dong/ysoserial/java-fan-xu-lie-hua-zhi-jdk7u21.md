@@ -200,7 +200,7 @@ public class InvocationHandlerTests {
 
 我们来具体看一下，该类位于 `com.sun.org.apache.xalan.internal.xsltc.trax` 包中，用于 xml document 的处理和转换，定义如下
 
-```text
+```java
 import javax.xml.transform.Templates;
 import java.io.Serializable;
 ...
@@ -213,7 +213,7 @@ public final class TemplatesImpl implements Templates, Serializable {
 
 其中 `Templates` 接口定义如下，包含了两个方法，**即之前提到触发恶意代码执行所的方法**
 
-```text
+```java
 public interface Templates {
     Transformer newTransformer() throws TransformerConfigurationException;
     Properties getOutputProperties();
@@ -222,7 +222,7 @@ public interface Templates {
 
 在 `TemplatesImpl` 类中有一个 private 方法 `defineTransletClasses()`，精简后的代码如下
 
-```text
+```java
 private byte[][] _bytecodes = null;
 ...
 private void defineTransletClasses()
@@ -257,7 +257,7 @@ private void defineTransletClasses()
 
 在 **Java static initializer** 部分提到 `ClassLoader.defineClass()` 并不会执行 static 代码块，所以前两个方法不满足条件，再看一下 `getTransletInstance()` 方法
 
-```text
+```java
    private Translet getTransletInstance()
         throws TransformerConfigurationException {
         try {
@@ -274,7 +274,7 @@ private void defineTransletClasses()
 
 `defineTransletClasses()` 执行后，会调用之前加载的 Class 的 `newInstance()` 方法来创建实例，触发 static block 和 constructor 的执行，根据方法调用关系
 
-```text
+```java
 getOutputProperties() => newTransformer() => getTransletInstance() => defineTransletClasses() => ClassLoader.defineClass()
 ```
 
@@ -288,7 +288,7 @@ getOutputProperties() => newTransformer() => getTransletInstance() => defineTran
 
 弹出计算器的代码示例如下 \(程序报错可以忽略\)
 
-```text
+```java
     @Test
     public void testTemplatesImpl() throws Exception {
         ClassPool pool = ClassPool.getDefault();
@@ -325,7 +325,7 @@ getOutputProperties() => newTransformer() => getTransletInstance() => defineTran
 
 AnnotationInvocationHandler 位于 `sun.reflect.annotation` 包中，用于 Annotation 的动态代理，其定义如下
 
-```text
+```java
 class AnnotationInvocationHandler implements InvocationHandler, Serializable {
     private final Class extends Annotation> type;
     private final Map<String, Object> memberValues;
@@ -341,7 +341,7 @@ class AnnotationInvocationHandler implements InvocationHandler, Serializable {
 
 可以看到实现了 `InvocationHandler` 和 `Serializable` 两个接口，根据 **Dynamic Proxy** 部分的介绍，使用 AnnotationInvocationHandler 创建的 proxy object 的所有方法调用都会变成对 invoke 方法的调用，来看一下方法的实现
 
-```text
+```java
  public Object invoke(Object proxy, Method method, Object[] args) {
         String member = method.getName();
         Class[] paramTypes = method.getParameterTypes();
@@ -358,7 +358,7 @@ class AnnotationInvocationHandler implements InvocationHandler, Serializable {
 
 跟入后可以看到，首先获取 `type` Class 所有声明的方法，然后在参数 Object o 上使用反射调用方法，因此前面所说 **TemplatesImpl** 实例是需要作为参数传入
 
-```text
+```java
      private Boolean equalsImpl(Object o) {
         // o 需要为 type 的实例
         if (!this.type.isInstance(o)) {
@@ -388,7 +388,7 @@ class AnnotationInvocationHandler implements InvocationHandler, Serializable {
 
 示例代码如下，运行即可弹出计算器
 
-```text
+```java
     @Test
     public void testTemplateImpl() throws Exception {
         Map map = new HashMap();
@@ -417,7 +417,7 @@ class AnnotationInvocationHandler implements InvocationHandler, Serializable {
 
 LinkedHashSet 位于 `java.util` 包中，是 HashSet 的子类，添加到 set 的元素会保持有序状态，**内部实现基于 HashMap**
 
-```text
+```java
 public class LinkedHashSet<E>
     extends HashSet<E>
     implements Set<E>, Cloneable, java.io.Serializable {
@@ -426,7 +426,7 @@ public class LinkedHashSet<E>
 
 在 HashSet 的 `writeObject()` 方法中，会依次调用每个元素的 `writeObject()` 方法来实现序列化
 
-```text
+```java
 private void writeObject(java.io.ObjectOutputStream s)
         throws java.io.IOException {
         ....
@@ -438,7 +438,7 @@ private void writeObject(java.io.ObjectOutputStream s)
 
 相应的，在反序列化过程中，会依次调用每个元素的 `readObject()` 方法，然后将其作为 `key` \(value 为固定值\) 依次放入 HashMap 中
 
-```text
+```java
     private void readObject(java.io.ObjectInputStream s)
         throws java.io.IOException, ClassNotFoundException {
         ...
@@ -450,9 +450,9 @@ private void writeObject(java.io.ObjectOutputStream s)
     }
 ```
 
-来看一下 `HashMap` 的 `put()` 方法，首先会调用内部 `hash()` 函数计算 key 的 hash 值，然后遍历所有元素，\*\*当要插入的元素的 hash 和已有 entry 相同，且 key 和 Entry的 key 指向同一个对象 或 二者equals时 \*\*，则认为 key 是否已经存在，返回 oldValue，否则调用 `addEntry()` 添加元素
+来看一下 `HashMap` 的 `put()` 方法，首先会调用内部 `hash()` 函数计算 key 的 hash 值，然后遍历所有元素，当要插入的元素的 hash 和已有 entry 相同，且 key 和 Entry的 key 指向同一个对象 或 二者equals时 ，则认为 key 是否已经存在，返回 oldValue，否则调用 `addEntry()` 添加元素
 
-```text
+```java
     public V put(K key, V value) {
         if (key == null)
             return putForNullKey(value);
@@ -494,7 +494,7 @@ private void writeObject(java.io.ObjectOutputStream s)
 
 条件 2 比较两个变量是否指向同一个对象，这里满足\(一个为包含恶意代码的templates 实例，一个为proxy object\)，条件1判断的是 hash 值是否相等，来看一下 hash 值是如何计算的
 
-```text
+```java
 final int hash(Object k) {
   int h = 0;
   ...
@@ -511,7 +511,7 @@ final int hash(Object k) {
 * **对于普通对象，返回的是就是 `k.hashCode()`**
 * 对用 proxy object，因为会统一调用 `inove()` ，而`AnnotationInvocationHandler` 在 `inove()` 方法中提供了 `hashCode()` 的实现，代码如下，内部调用了 `hashCodeImpl()`
 
-```text
+```java
 public Object invoke(Object obj, Method method, Object[] args) {
   String methodName = method.getName();
     ...
@@ -524,7 +524,7 @@ public Object invoke(Object obj, Method method, Object[] args) {
 
 `hashCodeImpl()` 代码如下 ，这里稍微修改了下代码，便于理解
 
-```text
+```java
 private int hashCodeImpl() {
   int result = 0;
   // 遍历 memberValues
@@ -542,7 +542,7 @@ private int hashCodeImpl() {
 
 for 循环内调用了 `memberValueHashCode()` 函数，其精简代码如下
 
-```text
+```java
 private static int memberValueHashCode(Object var0) {
         Class var1 = var0.getClass();
         if (!var1.isArray()) { // 匹配到该条件
@@ -557,7 +557,7 @@ private static int memberValueHashCode(Object var0) {
 
 如果 Entry 的 value 的 Class 不为 Array，则 `memberValueHashCode()` 函数返回 `value.hashCode()`，在这里相当于
 
-```text
+```java
 127 * key.hashCode() ^ value.hashCode();
 ```
 
@@ -571,7 +571,7 @@ private static int memberValueHashCode(Object var0) {
 
 到这里，就可以写出完整的利用代码
 
-```text
+```java
     @Test
     public void testPoc() throws Exception {
         Map map = new HashMap();
@@ -602,7 +602,7 @@ private static int memberValueHashCode(Object var0) {
 
 反序列化过程的方法调用链如下
 
-```text
+```java
 LinkedHashSet.readObject()
   LinkedHashSet.add()
     ...
