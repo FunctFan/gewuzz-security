@@ -144,7 +144,7 @@ System.out.println("f5a5a608".hashCode());
 
 ### Dynamic Proxy <a id="dynamic-proxy"></a>
 
-在 ysoserial 的代码中，大量使用了到动态代理机制来构造 payload，我们来简单了解一下
+在 ysoserial 的代码中，大量使用到了动态代理机制来构造 payload，我们来简单了解一下
 
 当需要增加或者修改某些已存在class的功能时，会使用动态代理机制，通过创建 proxy object 来代理实际的对象 。主要涉及接口为 `InvocationHandler`
 
