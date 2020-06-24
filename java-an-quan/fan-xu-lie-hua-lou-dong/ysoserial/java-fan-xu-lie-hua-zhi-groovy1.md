@@ -1,8 +1,10 @@
 ---
-description: ConvertedClosure+MethodClosure
+description: ConvertedClosure+MethodClosure+
 ---
 
 # Java 反序列化之Groovy1
+
+以下内容引自安全客「[天融信阿尔法实验室](https://www.anquanke.com/member/142730)」在其「[ysoserial Java 反序列化系列第一集 Groovy1](https://www.anquanke.com/post/id/202730)」的博文，具体内容已经是精简后的版本：
 
 ## ysoserial简介 <a id="h2-0"></a>
 
@@ -282,4 +284,8 @@ private void readObject(ObjectInputStream var1) throws IOException, ClassNotFoun
 ## 总结 <a id="h2-2"></a>
 
 其实网上反序列化的文章有很多，但是不知为何大家讲解反序列化漏洞时都是用CC链也就是Apache.CommonsCollections来进行举例，平心而论笔者觉得这个利用链一开始没接触过反序列化的同学直接理解还有一定的难度的，难在整个CC链的调用看上去略微复杂，并不是难在反序列化的部分。所笔者挑了一个个人觉得调用链比较清晰明了的Groovy来进行java 反序列化分析的第一篇文章，来帮助大家能更快速的了解java 反序列化漏洞。虽然Groovy1这个gadget在实际生产环境中碰的的概率可能少之又少，但是作为一个反序列化入门学习的例子笔者个人觉得还是比较适合的。
+
+## 参考文献
+
+* ysoserial Java 反序列化系列第一集 Groovy1：[https://www.anquanke.com/post/id/202730](https://www.anquanke.com/post/id/202730)
 
