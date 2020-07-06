@@ -1,8 +1,8 @@
 ---
-description: ConvertedClosure+MethodClosure+
+description: ConvertedClosure+MethodClosure+ConvertedClosure
 ---
 
-# Java 反序列化之Groovy1
+# Java反序列化之Groovy1
 
 以下内容引自安全客「[天融信阿尔法实验室](https://www.anquanke.com/member/142730)」在其「[ysoserial Java 反序列化系列第一集 Groovy1](https://www.anquanke.com/post/id/202730)」的博文，具体内容已经是精简后的版本：
 
