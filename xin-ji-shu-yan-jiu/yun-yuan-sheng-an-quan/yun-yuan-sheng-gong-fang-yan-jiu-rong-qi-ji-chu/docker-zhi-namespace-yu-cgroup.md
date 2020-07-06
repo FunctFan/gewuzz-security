@@ -4,6 +4,8 @@ description: 容器本质+LXC+三大特色
 
 # docker之namespace，cgroup与unionFS
 
+以下内容引自安全客「[JerryWang\_汪子熙](https://www.jianshu.com/u/99b8712e8850)」在其「[Docker技术三大要点：cgroup, namespace和unionFS的理解](https://www.jianshu.com/p/47c4a06a84a4)」的博文，具体内容已经是精简后的版本：
+
 ## 容器本质
 
 Docker其实是容器化技术的具体技术实现之一，采用go语言开发。很多朋友刚接触Docker时，认为它就是一种更轻量级的虚拟机，这种认识其实是错误的，Docker和虚拟机有本质的区别。
