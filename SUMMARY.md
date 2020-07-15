@@ -45,6 +45,8 @@
       * [Dirty CoW脏牛内核提权漏洞（CVE-2016-5195）](lou-dong-fu-xian/cao-zuo-xi-tong/linux/dirty-cow-zang-niu-nei-he-ti-quan-lou-dong-cve20165195.md)
   * [数据库](lou-dong-fu-xian/shu-ju-ku.md)
   * [WEB服务组件](lou-dong-fu-xian/web-fu-wu-zu-jian/README.md)
+    * [CVE-2020-2883](lou-dong-fu-xian/web-fu-wu-zu-jian/cve-2020-2883.md)
+    * [F5 BIG-IP远程代码执行漏洞（CVE-2020-5902）](lou-dong-fu-xian/web-fu-wu-zu-jian/f5-bigip-yuan-cheng-dai-ma-zhi-hang-lou-dong-cve20205902.md)
     * [Apache Solr 远程命令执行漏洞（CVE-2019-0193）](lou-dong-fu-xian/web-fu-wu-zu-jian/apache-solr-yuan-cheng-ming-ling-zhi-hang-lou-dong-cve20190193.md)
 * [新技术研究](xin-ji-shu-yan-jiu/README.md)
   * [云原生安全](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/README.md)
