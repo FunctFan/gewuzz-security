@@ -37,6 +37,8 @@
       * [tmnt-Web应用漏洞fuzzer](lou-dong-wa-jue/fuzzing-ji-shu/gong-ju-ji/tmntweb-ying-yong-lou-dong-fuzzer.md)
       * [wfuzz-web app fuzzer](lou-dong-wa-jue/fuzzing-ji-shu/gong-ju-ji/wfuzz-ji-ben-gong.md)
       * [AFL-基于变异的fuzz工具](lou-dong-wa-jue/fuzzing-ji-shu/gong-ju-ji/afl.md)
+* [漏洞分类研究报告](lou-dong-fen-lei-yan-jiu-bao-gao/README.md)
+  * [WebLogic安全研究报告](lou-dong-fen-lei-yan-jiu-bao-gao/weblogic-an-quan-yan-jiu-bao-gao.md)
 * [漏洞复现](lou-dong-fu-xian/README.md)
   * [操作系统](lou-dong-fu-xian/cao-zuo-xi-tong/README.md)
     * [windows](lou-dong-fu-xian/cao-zuo-xi-tong/windows.md)
