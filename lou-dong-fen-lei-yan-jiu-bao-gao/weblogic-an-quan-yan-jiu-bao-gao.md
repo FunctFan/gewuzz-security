@@ -72,3 +72,29 @@ WebLogic版本众多，但是现在我们经常见到的只有两个类别：10.
 
 值得注意的是，**Oracle WebLogic Server 10.3.6支持的最低JDK版本为JDK1.6， Oracle WebLogic Server 12.1.3支持的最低JDK版本为JDK1.7，Oracle WebLogic Server 12.2.1及以上支持的最低JDK版本为JDK1.8**。因此由于JDK的版本不同，尤其是反序列化漏洞的利用方式会略有不同。同时，**不同的Oracle WebLogic Server版本依赖的组件\(jar包\)也不尽相同，因此不同的WebLogic版本在反序列化漏洞的利用上可能需要使用不同的Gadget链（反序列化漏洞的利用链条）。**但这些技巧性的东西不是本文的重点，请参考其他文章。如果出现一些PoC在某些时候可以利用，某些时候利用不成功的情况，应考虑到这两点。
 
+## WebLogic的安装
+
+在我做WebLogic相关的漏洞分析时，搭建环境的过程可谓痛苦。某些时候需要测试不同的WebLogic版本和不同的JDK版本各种排列组合。于是在我写这篇文章的同时，我也对解决WebLogic环境搭建这个痛点上做了一点努力。随这篇文章会开源一个Demo级别的WebLogic环境搭建工具，工具地址：[https://github.com/QAX-A-Team/WeblogicEnvironment](https://github.com/QAX-A-Team/WeblogicEnvironment)关于这个工具我会在后面花一些篇幅具体说，这里我先把WebLogic的安装思路和一些坑点整理一下。注意后面内容中出现的`$MW_HOME`均为middleware中间件所在目录，`$WLS_HOME`均为WebLogic Server所在目录。
+
+第一步：安装JDK。首先需要明确你要使用的WebLogic版本，WebLogic的安装需要JDK的支持，因此参考上一节各个WebLogic版本所对应的JDK最低版本选择下载和安装对应的JDK。一个小技巧，如果是做安全研究，直接安装对应WebLogic版本支持的最低JDK版本更容易复现成功。
+
+第二步：安装WebLogic。从Oracle官方下载页面下载对应的WebLogic安装包，如果你的操作系统有图形界面，可以双击直接安装。如果你的操作系统没有图形界面，参考静默安装文档安装。11g和12c的静默安装方式不尽相同：
+
+11g静默安装文档：[https://oracle-ba se.com/articles/11g/weblogic-silent-installation-11g12c](https://oracle-ba%20se.com/articles/11g/weblogic-silent-installation-11g12c)静默安装文档：[https://oracle-ba se.com/articles/12c/weblogic-silent-installation-12c](https://oracle-ba%20se.com/articles/12c/weblogic-silent-installation-12c)
+
+第三步：创建Oracle WebLogic Server域。前两步的安装都完成之后，要启动WebLogic还需要创建一个WebLogic Server域，如果有图形界面，在`$WLS_HOME\common\bin`中找到`config.cmd（Windows）`或`config.sh（Unix/Linux）`双击，按照向导创建域即可。同样的，创建域也可以使用静默创建方式，参考文档：《Silent Oracle Fusion Middleware Installation and Deinstallation——Creating a WebLogic Domain in Silent Mode》[https://docs.oracle.com/cd/E28280\_01/install.1111/b32474/silent\_install.htm\#CHDGECID](https://docs.oracle.com/cd/E28280_01/install.1111/b32474/silent_install.htm#CHDGECID)
+
+第四步：启动WebLogic Server。我们通过上面的步骤已经创建了域，在对应域目录下的`bin/`文件夹找到`startWebLogic.cmd（Windows）`或`startWebLogic.sh（Unix/Linux）`，运行即可。
+
+下图为已启动的WebLogic Server：
+
+![4.png](https://nosec.org/avatar/uploads/attach/image/0a4f04e4ba9224d8ffeb383ee6607de1/4.png)
+
+安装完成后，打开浏览器访问“[http://localhost:7001/console/](http://localhost:7001/console/)”，输入安装时设置的账号密码，即可看到WebLogic Server管理控制台：
+
+![5.png](https://nosec.org/avatar/uploads/attach/image/c016a0099bd1c8d3539a314078eb5c3c/5.png)
+
+看到这个页面说明我们已经完成了WebLogic Server的环境搭建。WebLogic集群不在本文的讨论范围。关于这个页面的内容，主要围绕着Java EE规范的全部实现和管理展开，以及WebLogic Server自身的配置。非常的庞大。也不是本文能讲完的。
+
+
+
