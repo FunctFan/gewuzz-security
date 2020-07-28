@@ -24,7 +24,7 @@
     * [XXE爱之初印象](java-an-quan/xxe-lou-dong/xxe-ai-zhi-chu-yin-xiang.md)
     * [XXE漏洞写法及防御](java-an-quan/xxe-lou-dong/xxe-lou-dong-xie-fa-ji-fang-yu.md)
     * [XXExploiter工具](java-an-quan/xxe-lou-dong/xxexploiter-gong-ju.md)
-* [漏洞挖掘入门方法](lou-dong-wa-jue/README.md)
+* [漏洞挖掘入门](lou-dong-wa-jue/README.md)
   * [小白入门](lou-dong-wa-jue/xiao-bai-ru-men.md)
   * [源代码审计方法](lou-dong-wa-jue/yuan-dai-ma-shen-ji-fang-fa/README.md)
     * [Java类编译与反编译基础](lou-dong-wa-jue/yuan-dai-ma-shen-ji-fang-fa/java-lei-bian-yi-yu-fan-bian-yi-ji-chu.md)
