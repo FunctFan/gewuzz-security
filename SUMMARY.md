@@ -40,6 +40,8 @@
 * [漏洞分类框架研究报告](lou-dong-fen-lei-yan-jiu-bao-gao/README.md)
   * [WebLogic安全研究报告](lou-dong-fen-lei-yan-jiu-bao-gao/weblogic-an-quan-yan-jiu-bao-gao.md)
 * [漏洞情报监测](lou-dong-qing-bao-jian-ce.md)
+* [分类漏洞安全检测工具](fen-lei-lou-dong-an-quan-jian-ce-gong-ju/README.md)
+  * [WebLogic漏洞检测小工具](fen-lei-lou-dong-an-quan-jian-ce-gong-ju/weblogic-lou-dong-jian-ce-xiao-gong-ju.md)
 * [漏洞复现](lou-dong-fu-xian/README.md)
   * [操作系统](lou-dong-fu-xian/cao-zuo-xi-tong/README.md)
     * [windows](lou-dong-fu-xian/cao-zuo-xi-tong/windows.md)
