@@ -30,7 +30,7 @@ description: 首次公开一种本人在对智能设备进行安全测试过程�
 
 这是智能设备的组成，分为几个部分，智能设备必须有这么几个东西，比如它必须有CPU、内存、相当于硬盘的flash，有网络、网口接口、串口，有时会有SD卡插座存储设备，也有的有显示界面。
 
-![](https://bbs.pediy.com/upload/attach/201807/581522_BF3CJBJCGWJFMF7.png)
+![](../../.gitbook/assets/image%20%2891%29.png)
 
 CPU有很多架构，有X86、MIPS、ARM等；
 
@@ -42,13 +42,13 @@ CPU有很多架构，有X86、MIPS、ARM等；
 
 ### 串口
 
-![](https://bbs.pediy.com/upload/attach/201807/581522_RUQAUWSBXH3GU8V.png)
+![](../../.gitbook/assets/image%20%2896%29.png)
 
 跟大家介绍一下什么是串口，串口一般分为两种类型，主要是RS232或者TTL，TTL是5V或者3.3V，相当于CPU的电压。左下角是对串口的定义，串口真正引用的是三条线，就是RXD、TXD、DCD。串口传输时，有三根线的时候，是按照一定的时序传输的，这个时序有一定的周期，这个周期是异步产生的。异步传输有一个波特率的概念: 如:9600的波特率,换算过来大概1秒钟传送1000个字节。波特率越大，传输越快。
 
 ### flash
 
-![](https://bbs.pediy.com/upload/attach/201807/581522_5DWBCEKKC6C7UP9.png)
+![](../../.gitbook/assets/image%20%2893%29.png)
 
 智能设备的组成里比较重要的还有flash，分为两种，一种是Nor falsh，它的特点是价格比较贵、容量小、地址线和数据线是分开的，好处是CPU可直接寻址，因为电路图上每一个地址线都是单个连出来的，数据线也是单独连出来的。它常用做代码存储，存储容量越大，这个地址线是越多的。
 
@@ -58,7 +58,7 @@ CPU有很多架构，有X86、MIPS、ARM等；
 换算成二进制: 100000000000000000000000  
 地址线正好是从addr0 - addr22. 最大地址是22个1
 
-![](https://bbs.pediy.com/upload/attach/201807/581522_RWVB7D7QNVJY8AF.png)
+![](../../.gitbook/assets/image%20%2894%29.png)
 
 还有一种是Nand Flash，它价格便宜、容量大，主要用作数据存储，但这个东西一般是不可寻址，需要驱动程序。
 
@@ -66,7 +66,7 @@ CPU有很多架构，有X86、MIPS、ARM等；
 
 下面讲一下软件里面的Uboot和busybox，Uboot在嵌入式里一个功能是做引导程序，启动的时候引导用，还有一个功能是做更新时用.支持CPU的种类比较多，比如ARM、Linux、MIPS、PowerPC都支持，也支持简单的网络命令之类的。Busybox集成了三百多个常用的Linux命令和工具软件，它非常小巧，编译后大概在1-2兆左右，但支持的命令非常多，而且可以根据需要做裁减。例如：有的裁剪了busybox的指令nc,dd,tar等。
 
-![](https://bbs.pediy.com/upload/attach/201807/581522_J4XGB3N8Q2ZGXSV.png)
+![](../../.gitbook/assets/image%20%2889%29.png)
 
 ### 智能设备软件和硬件的协作关系
 
@@ -82,7 +82,7 @@ CPU有很多架构，有X86、MIPS、ARM等；
 
  这十种思路是我所熟知的，是我经常用的十种方法，其他不讲的方法并不代表不存在。固件提取方法简单分为硬件和软件两种类型。
 
-![](https://bbs.pediy.com/upload/attach/201807/581522_467WNMBKEJEMGHD.png)
+![](../../.gitbook/assets/image%20%2890%29.png)
 
 我刚才对基础知识做了大概的介绍，比如我要提取它的固件，它的固件放在flash里，我肯定要做一些了解。还有对串口和接口都要有研究。还有固件里面支持这些程序，对文件系统、基础小命令等都要有一定的了解，这些知识和技巧利用好是可以发挥很大功效的。
 

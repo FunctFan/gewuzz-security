@@ -36,7 +36,7 @@ J2EE使用多层的分布式应用模型，应用逻辑按功能划分为组件�
 * 运行在J2EE服务器上的业务逻辑层组件
 * 运行在EIS服务器上的企业信息系统\(Enterprise information system\)层软件
 
-![](../.gitbook/assets/image%20%2890%29.png)
+![](../.gitbook/assets/image%20%2895%29.png)
 
 #### **J2EE应用程序组件**
 
@@ -52,13 +52,13 @@ J2EE web层组件可以是JSP 页面或Servlets.按照J2EE规范，静态的HTML
 
 
 
-![](../.gitbook/assets/image%20%2891%29.png)
+![](../.gitbook/assets/image%20%2897%29.png)
 
 #### **业务层组件**
 
 业务层代码的逻辑用来满足银行，零售，金融等特殊商务领域的需要,由运行在业务层上的enterprise bean 进行处理. 下图表明了一个enterprise bean 是如何从客户端程序接收数据，进行处理\(如果必要的话\), 并发送到EIS 层储存的，这个过程也可以逆向进行。有三种企业级的bean: 会话\(session\) beans, 实体\(entity\) beans, 和 消息驱动\(message-driven\) beans. 会话bean 表示与客户端程序的临时交互. 当客户端程序执行完后, 会话bean 和相关数据就会消失. 相反, 实体bean 表示数据库的表中一行永久的记录. 当客户端程序中止或服务器关闭时, 就会有潜在的服务保证实体bean 的数据得以保存.消息驱动 bean 结合了会话bean 和 JMS的消息监听器的特性, 允许一个业务层组件异步接收JMS 消息.
 
-![](../.gitbook/assets/image%20%2892%29.png)
+![](../.gitbook/assets/image%20%2898%29.png)
 
 #### **企业信息系统层**
 
@@ -86,7 +86,7 @@ J2EE应用组件可以安装部署到以下几种容器中去:
 * 应用程序客户端容器管理所有J2EE应用程序中应用程序客户端组件的执行. 应用程序客户端和它们的容器运行在J2EE 服务器上.
 * Applet 容器是运行在客户端机器上的web浏览器和 Java 插件的结合.
 
-![](../.gitbook/assets/image%20%2889%29.png)
+![](../.gitbook/assets/image%20%2892%29.png)
 
 ### J2EE的核心API与组件 <a id="5"></a>
 
