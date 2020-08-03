@@ -302,3 +302,37 @@ int __fastcall tddp_version1_type_handle(tddp_ctx *ctx, _DWORD *count)
 
 至此，漏洞分析结束。
 
+### 补丁比对 <a id="toc-5"></a>
+
+最新版本的固件已经修复了该漏洞，我想比对下厂商是如何修复该漏洞的。用bindiff将该程序与最新版本的固件中的tddp程序进行对比。
+
+![](https://xzfile.aliyuncs.com/media/upload/picture/20190822162220-f5fa1e5e-c4b5-1.png)
+
+可以看到`tddp_version1_type_handle`存在一定的差距，查看该函数的流程。
+
+![](https://xzfile.aliyuncs.com/media/upload/picture/20190822162234-fe0ba43c-c4b5-1.png)
+
+可以看到流程图中部分的基本块被删除了，猜测是直接将`0x31`字段对应的基本块给删掉了来修复该漏洞。
+
+![](https://xzfile.aliyuncs.com/media/upload/picture/20190822162247-061d8988-c4b6-1.png)
+
+点击各个基本块，可以看到确实是`CMD_FTEST_CONFIG`基本块被删掉了。同时也可以在ida中确认该基本块被删除。
+
+## 小结
+
+该漏洞只能称之为任意命令执行（ACE）而不是远程命令执行（RCE）的原因似乎是因为TDDP 服务只能通过有线网络访问，连 Wi-Fi 也不能访问，没有真机，不好确认，有点可惜。
+
+总的来说，漏洞还是很简单的。tddp第一版协议竟然未对用户进行验证就允许执行如此强大的调试功能，实在是有点不应该。
+
+相关代码和脚本在我的[github](https://github.com/ray-cp/Vuln_Analysis/tree/master/TP-Link_sr20_tddp_ACE)
+
+## 参考链接
+
+1. [重现 TP-Link SR20 本地网络远程代码执行漏洞](https://paper.seebug.org/879/)
+2. [A Story About TP-link Device Debug Protocol \(TDDP\) Research](https://www.coresecurity.com/blog/story-about-tp-link-device-debug-protocol-tddp-research)
+3. [Data communication method, system and processor among CPUs](https://patents.google.com/patent/CN102096654A/en)
+4. \[[Remote code execution as root from the local network on TP-Link SR20 routers](https://mjg59.dreamwidth.org/51672.html)\]
+5. [Download for SR20 V1](https://www.tp-link.com/us/support/download/sr20/#Firmware)
+6. [lua学习笔记3-c调用lua](https://www.jianshu.com/p/008541576635)
+7. [MIPS漏洞调试环境安装及栈溢出](https://ray-cp.github.io/archivers/MIPS_Debug_Environment_and_Stack_Overflow)
+
