@@ -4,3 +4,21 @@ description: 工业互联网，物联网，车载网安全
 
 # 物联网漏洞挖掘技术
 
+编译好的各架构的gdbserver:
+
+{% embed url="https://github.com/e3pem/embedded-toolkit/tree/master/prebuilt\_static\_bins/gdbserver" %}
+
+## 入门资料必备
+
+关于对智能设备如何进行安全分析，请参考： 
+
+绿盟 - 智能设备安全分析手册：[https://book.yunzhan365.com/tkgd/lzkp/mobile/index.html](https://book.yunzhan365.com/tkgd/lzkp/mobile/index.html)
+
+这个是新版的attifyOS 集成了固件分析的工具:
+
+{% embed url="https://github.com/adi0x90/attifyos" %}
+
+总结的IOT资料 [https://zybuluo.com/H4l0/note/1524758](https://zybuluo.com/H4l0/note/1524758) 密码是1286
+
+![&#x5165;&#x95E8;&#x4E8C;&#x8FDB;&#x5236;&#x6F0F;&#x6D1E;&#x5206;&#x6790;&#x8111;&#x56FE;](../../.gitbook/assets/ru-men-er-jin-zhi-lou-dong-fen-xi-nao-tu-.png)
+
