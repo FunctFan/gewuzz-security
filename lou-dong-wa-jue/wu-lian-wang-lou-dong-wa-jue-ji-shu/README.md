@@ -4,6 +4,8 @@ description: 工业互联网，物联网，车载网安全
 
 # 物联网漏洞挖掘技术
 
+## GDBserver
+
 编译好的各架构的gdbserver:
 
 {% embed url="https://github.com/e3pem/embedded-toolkit/tree/master/prebuilt\_static\_bins/gdbserver" %}
