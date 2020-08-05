@@ -6,6 +6,8 @@ description: 工业互联网，物联网，车载网安全
 
 ## 分析环境部署
 
+安装必备：qemu,binwalk,pwndbg,gdb-multidbg
+
 ### 某实验室开源分析环境：
 
 [https://www.qiling.io/](https://www.qiling.io/)
@@ -48,7 +50,7 @@ chroot . ./mydemo /usr/bin/tddp
 
 gdb-peda:c b n ni s target remote ip:port
 
-binwalk -Me  .bin
+binwalk -Me  \*.bin
 
 file smb
 
