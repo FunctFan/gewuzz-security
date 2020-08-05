@@ -8,6 +8,8 @@ description: 工业互联网，物联网，车载网安全
 
 安装必备：qemu,binwalk,pwndbg,gdb-multidbg
 
+可选：IDA,Ghidra,fat,交叉编译环境buildboot
+
 ### 某实验室开源分析环境：
 
 [https://www.qiling.io/](https://www.qiling.io/)
