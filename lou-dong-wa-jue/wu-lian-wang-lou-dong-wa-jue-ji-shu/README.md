@@ -4,6 +4,22 @@ description: 工业互联网，物联网，车载网安全
 
 # 物联网漏洞挖掘技术
 
+## 分析环境部署
+
+### 某实验室开源分析环境：
+
+[https://www.qiling.io/](https://www.qiling.io/)
+
+[https://github.com/qilingframework/qiling](https://github.com/qilingframework/qiling)
+
+### mips环境部署
+
+[https://ray-cp.github.io/archivers/MIPS\_Debug\_Environment\_and\_Stack\_Overflow\#mips-%E6%B1%87%E7%BC%96%E5%9F%BA%E7%A1%80](https://ray-cp.github.io/archivers/MIPS_Debug_Environment_and_Stack_Overflow#mips-%E6%B1%87%E7%BC%96%E5%9F%BA%E7%A1%80) 不看里面的buidroot和网络配置
+
+[https://wzt.ac.cn/2019/09/10/QEMU-networking](https://wzt.ac.cn/2019/09/10/QEMU-networking) 网络照这个配置
+
+qemu-kvm
+
 ## GDBserver
 
 编译好的各架构的gdbserver:
