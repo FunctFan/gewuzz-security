@@ -4,6 +4,67 @@ description: 包括宿主机docker环境检测，执行容器内部信息获取�
 
 # 容器安全检测脚本总结
 
+## docker-bench-security
+
+{% embed url="https://github.com/FunctFan/docker-bench-security.git" %}
+
+### Running Docker Bench for Security
+
+We packaged docker bench as a small container for your convenience. Note that this container is being run with a _lot_ of privilege -- sharing the host's filesystem, pid and network namespaces, due to portions of the benchmark applying to the running host.
+
+The easiest way to run your hosts against the Docker Bench for Security is by running our pre-built container:
+
+```text
+docker run -it --net host --pid host --userns host --cap-add audit_control \
+    -e DOCKER_CONTENT_TRUST=$DOCKER_CONTENT_TRUST \
+    -v /etc:/etc:ro \
+    -v /usr/bin/containerd:/usr/bin/containerd:ro \
+    -v /usr/bin/runc:/usr/bin/runc:ro \
+    -v /usr/lib/systemd:/usr/lib/systemd:ro \
+    -v /var/lib:/var/lib:ro \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    --label docker_bench_security \
+    docker/docker-bench-security
+```
+
+Don't forget to adjust the shared volumes according to your operating system. Some examples are:
+
+1. `Docker Desktop` on macOS don't have `/usr/lib/systemd` or the above Docker binaries.
+
+```text
+docker run -it --net host --pid host --userns host --cap-add audit_control \
+    -e DOCKER_CONTENT_TRUST=$DOCKER_CONTENT_TRUST \
+    -v /etc:/etc \
+    -v /var/lib:/var/lib:ro \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    --label docker_bench_security \
+    docker/docker-bench-security
+```
+
+1. On Ubuntu the `docker.service` and `docker.secret` files are located in `/lib/systemd/system` folder by default.
+
+```text
+docker run -it --net host --pid host --userns host --cap-add audit_control \
+    -e DOCKER_CONTENT_TRUST=$DOCKER_CONTENT_TRUST \
+    -v /etc:/etc:ro \
+    -v /lib/systemd/system:/lib/systemd/system:ro \
+    -v /usr/bin/containerd:/usr/bin/containerd:ro \
+    -v /usr/bin/runc:/usr/bin/runc:ro \
+    -v /usr/lib/systemd:/usr/lib/systemd:ro \
+    -v /var/lib:/var/lib:ro \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    --label docker_bench_security \
+    docker/docker-bench-security
+```
+
+Docker bench requires Docker 1.13.0 or later in order to run.
+
+Note that when distributions doesn't contain `auditctl`, the audit tests will check `/etc/audit/audit.rules` to see if a rule is present instead.
+
+Distribution specific Dockerfiles that fixes this issue are available in the [distros directory](https://github.com/docker/docker-bench-security/tree/master/distros).
+
+The [distribution specific Dockerfiles](https://github.com/docker/docker-bench-security/tree/master/distros) may also help if the distribution you're using haven't yet shipped Docker version 1.13.0 or later.
+
 ## 在宿主机探测docker环境的自动化脚本
 
 问题：/.dockerenv文件是否存在？ 
