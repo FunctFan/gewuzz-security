@@ -41,7 +41,7 @@
       * [AFL-基于变异的fuzz工具](lou-dong-wa-jue/fuzzing-ji-shu/gong-ju-ji/afl.md)
   * [物联网漏洞挖掘技术](lou-dong-wa-jue/wu-lian-wang-lou-dong-wa-jue-ji-shu/README.md)
     * [智能设备漏洞挖掘之固件提取](lou-dong-wa-jue/wu-lian-wang-lou-dong-wa-jue-ji-shu/zhi-neng-she-bei-lou-dong-wa-jue-zhi-gu-jian-ti-qu.md)
-* [web漏洞框架研究报告](lou-dong-fen-lei-yan-jiu-bao-gao/README.md)
+* [web类框架研究报告](lou-dong-fen-lei-yan-jiu-bao-gao/README.md)
   * [WebLogic安全研究报告](lou-dong-fen-lei-yan-jiu-bao-gao/weblogic-an-quan-yan-jiu-bao-gao.md)
 * [漏洞情报监测](lou-dong-qing-bao-jian-ce.md)
 * [漏洞安全检测工具](fen-lei-lou-dong-an-quan-jian-ce-gong-ju/README.md)
