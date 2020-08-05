@@ -6,7 +6,7 @@ description: 工业互联网，物联网，车载网安全
 
 ## 分析环境部署
 
-安装必备：qemu,binwalk,pwndbg,gdb-multidbg
+安装必备：qemu,binwalk,pwndbg,gdb-multiarch
 
 可选：IDA,Ghidra,fat,交叉编译环境buildboot
 
