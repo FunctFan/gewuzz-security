@@ -166,6 +166,8 @@ brctl showstp br0                   # 查看 br0 的各接口信息
 
 ## 常用命令
 
+### 单文件模拟及远程调试
+
 chroot . ./mydemo /usr/bin/tddp
 
 ./gdbserver \*:12345 --attach $\(pgrep smb\)
@@ -177,6 +179,10 @@ binwalk -Me  \*.bin
 file smb
 
 which/locate/find/whereis
+
+### 提取lzmadata数据
+
+dd if=tpra\_sr20v1\_us-up-ver1-2-1-P522\_20180518-rel77140\_2018-05-21\_08.42.04.bin of=lzma\_data bs=1 skip=64
 
 ## qemu模拟
 
