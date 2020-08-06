@@ -42,7 +42,7 @@
   * [物联网漏洞挖掘技术](lou-dong-wa-jue/wu-lian-wang-lou-dong-wa-jue-ji-shu/README.md)
     * [物联网设备固件模拟分析环境\*（亲测下载好慢,不建议使用该教程）](lou-dong-wa-jue/wu-lian-wang-lou-dong-wa-jue-ji-shu/wu-lian-wang-she-bei-gu-jian-mo-ni-fen-xi-huan-jing-qin-ce-xia-zai-hao-man.md)
     * [智能设备漏洞挖掘之固件提取](lou-dong-wa-jue/wu-lian-wang-lou-dong-wa-jue-ji-shu/zhi-neng-she-bei-lou-dong-wa-jue-zhi-gu-jian-ti-qu.md)
-    * [pwndbg使用教程](lou-dong-wa-jue/wu-lian-wang-lou-dong-wa-jue-ji-shu/pwndbg-shi-yong-jiao-cheng.md)
+    * [pwndbg调试工具使用教程](lou-dong-wa-jue/wu-lian-wang-lou-dong-wa-jue-ji-shu/pwndbg-shi-yong-jiao-cheng.md)
 * [web类框架研究报告](lou-dong-fen-lei-yan-jiu-bao-gao/README.md)
   * [WebLogic安全研究报告](lou-dong-fen-lei-yan-jiu-bao-gao/weblogic-an-quan-yan-jiu-bao-gao.md)
 * [漏洞情报监测](lou-dong-qing-bao-jian-ce.md)

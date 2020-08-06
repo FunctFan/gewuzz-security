@@ -166,6 +166,8 @@ brctl showstp br0                   # 查看 br0 的各接口信息
 
 ## 常用命令
 
+### 单文件模拟及远程调试
+
 chroot . ./mydemo /usr/bin/tddp
 
 ./gdbserver \*:12345 --attach $\(pgrep smb\)
@@ -178,9 +180,19 @@ file smb
 
 which/locate/find/whereis
 
+### 提取lzmadata数据
+
+dd if=tpra\_sr20v1\_us-up-ver1-2-1-P522\_20180518-rel77140\_2018-05-21\_08.42.04.bin of=lzma\_data bs=1 skip=64
+
 ## qemu模拟
 
-$ sudo tunctl -t tap0 -u `whoami` \# 为了与 QEMU 虚拟机通信，添加一个虚拟网卡                                            $ sudo ifconfig tap0 10.10.10.1/24 \# 为添加的虚拟网卡配置 IP 地址                                                                   $ qemu-system-arm -M vexpress-a9 -kernel vmlinuz-3.2.0-4-vexpress -initrd initrd.img-3.2.0-4-vexpress -drive if=sd,file=debian\_wheezy\_armhf\_standard.qcow2 -append "root=/dev/mmcblk0p2 console=ttyAMA0" -net nic -net tap,ifname=tap0,script=no,downscript=no -nographic 123
+```text
+$ sudo tunctl -t tap0 -u `whoami`  # 为了与 QEMU 虚拟机通信，添加一个虚拟网卡
+$ sudo ifconfig tap0 10.10.10.1/24 # 为添加的虚拟网卡配置 IP 地址
+$ qemu-system-arm -M vexpress-a9 -kernel vmlinuz-3.2.0-4-vexpress -initrd initrd.img-3.2.0-4-vexpress -drive if=sd,file=debian_wheezy_armhf_standard.qcow2 -append "root=/dev/mmcblk0p2 console=ttyAMA0" -net nic -net tap,ifname=tap0,script=no,downscript=no -nographic
+```
+
+$ sudo tunctl -t tap0 -u `whoami` \# 为了与 QEMU 虚拟机通信，添加一个虚拟网卡                                            $ sudo ifconfig tap0 10.10.10.1/24 \# 为添加的虚拟网卡配置 IP 地址                                                                   $ qemu-system-arm -M vexpress-a9 -kernel vmlinuz-3.2.0-4-vexpress -initrd initrd.img-3.2.0-4-vexpress -drive if=sd,file=debian\_wheezy\_armhf\_standard.qcow2 -append "root=/dev/mmcblk0p2 console=ttyAMA0" -net nic -net tap,ifname=tap0,script=no,downscript=no -nographic
 
 
 
