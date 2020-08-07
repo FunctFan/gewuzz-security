@@ -82,6 +82,7 @@ GDB主要可以做4大类事（加上一些其他的辅助工作），以帮助�
   * hexdump 0x7fffffffe3b8
   * x/s 0x7fffffffe3b8
 * 10.通过nextcall可以直接进行下一次调用
+* 11.vmmap可以查看内存布局
 
 
 
