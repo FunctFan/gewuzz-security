@@ -81,6 +81,7 @@ GDB主要可以做4大类事（加上一些其他的辅助工作），以帮助�
 * 9.可以通过hexdump查看栈的地址的内容
   * hexdump 0x7fffffffe3b8
   * x/s 0x7fffffffe3b8
+* 10.通过nextcall可以直接进行下一次调用
 
 
 
