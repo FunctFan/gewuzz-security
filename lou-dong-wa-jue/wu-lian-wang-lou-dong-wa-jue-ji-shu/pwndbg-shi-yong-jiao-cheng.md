@@ -80,6 +80,7 @@ GDB主要可以做4大类事（加上一些其他的辅助工作），以帮助�
 * 8.输入context可以重新刷新一下之前的调试界面
 * 9.可以通过hexdump查看栈的地址的内容
   * hexdump 0x7fffffffe3b8
+  * x/s 0x7fffffffe3b8
 
 
 
