@@ -75,4 +75,6 @@
   * [联邦安全](xin-ji-shu-yan-jiu/lian-bang-an-quan.md)
   * [云边协同](xin-ji-shu-yan-jiu/yun-bian-xie-tong.md)
   * [安全多方计算](xin-ji-shu-yan-jiu/an-quan-duo-fang-ji-suan.md)
+* [CTF比赛](ctf-bi-sai/README.md)
+  * [Exploit利器——Pwntools](ctf-bi-sai/exploit-li-qi-pwntools.md)
 
