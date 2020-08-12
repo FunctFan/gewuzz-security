@@ -65,6 +65,7 @@
     * [TP-Link SR20 本地网络远程代码执行漏洞](lou-dong-fu-xian/wu-lian-wang-an-quan/tplink-sr20-ben-di-wang-luo-yuan-cheng-dai-ma-zhi-hang-lou-dong.md)
 * [新技术研究](xin-ji-shu-yan-jiu/README.md)
   * [云原生安全](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/README.md)
+    * [虚拟化技术](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/xu-ni-hua-ji-shu.md)
     * [【云原生攻防研究】容器基础](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/yun-yuan-sheng-gong-fang-yan-jiu-rong-qi-ji-chu/README.md)
       * [docker之namespace，cgroup与unionFS](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/yun-yuan-sheng-gong-fang-yan-jiu-rong-qi-ji-chu/docker-zhi-namespace-yu-cgroup.md)
       * [Linux内核安全模块之AppArmor](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/yun-yuan-sheng-gong-fang-yan-jiu-rong-qi-ji-chu/linux-nei-he-an-quan-mo-kuai-zhi-apparmor.md)
