@@ -111,10 +111,13 @@ GDB主要可以做4大类事（加上一些其他的辅助工作），以帮助�
 * 智能搜索可以查找的字符串更全
 * od的基址与ida可能不一样
 *  在看[Shark恒 破解教程](http://www.52pojie.cn/thread-200439-1-1.html) 时，有很多吾友对教程中按键的含义不懂，我发一个常用的快捷键列表，希望对新手有点帮助。 打开一个新的可执行程序 \(F3\) 重新运行当前调试的程序 \(Ctrl+F2\) 当前调试的程序 \(Alt+F2\) 运行选定的程序进行调试 \(F9\) 暂时停止被调试程序的执行 \(F12\) 单步进入被调试程序的 Call 中 \(F7\) 步过被调试程序的 Call \(F8\) 跟入被调试程序的 Call 中 \(Ctrl+F11\) 跟踪时跳过被调试程序的 Call \(Ctrl+F12\) 执行直到返回 \(Ctrl+F9\) 显示记录窗口 \(Alt+L\) 显示模块窗口 \(Alt+E\) 显示内存窗口 \(Alt+M\) 显示 CPU 窗口 \(Alt+C\) 显示补丁窗口 \(Ctrl+P\) 显示呼叫堆栈 \(Alt+K\) 显示断点窗口 \(Alt+B\) 打开调试选项窗口 \(Alt+O\)
-* PLT:CODE
-* GOT:ADDRESS
-* PROGRAM CALL --&gt; PLT --&gt; GOT --&gt;LIBC
+* plt与got
+  * PLT:CODE
+  * GOT:ADDRESS
+  * PROGRAM CALL --&gt; PLT --&gt; GOT --&gt;LIBC
 * 64位传参：rdi,rsi,rdx
+  * POP rdi; ret// 通过_pop_为_rdi_赋值,再通过_ret_指令跳转到我们希望的地方
+* ret：sp增加一个内存单元栈顶数据出栈赋值给ip寄存器
 
 
 
