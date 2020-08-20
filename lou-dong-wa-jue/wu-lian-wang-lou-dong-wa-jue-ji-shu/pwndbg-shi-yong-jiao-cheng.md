@@ -145,7 +145,7 @@ gcc -g -m32 learn_stack.c -o learn_stack_32
 
 * 栈从内存高地址向低地址生长，调用执行函数的时候：首先将被调用函数参数按照从右向左的顺序依次入栈，之后的流程为：
   * 1.将call指令的下一条地址入栈，即被调用函数的返回地址入栈；
-  * 2.main函数的栈底地址入栈，即ebp入栈；mov ebp,esp;，使得ebp指向新的栈顶；
+  * 2.main函数的栈底地址入栈，即ebp入栈；mov ebp,esp;使得ebp指向新的栈顶；
   * 3.之后被调用函数的局部变量入栈，执行到leave ret指令的时候：mov esp,ebp;pop ebp;，相当于恢复ebp原来的值，esp指向原来的位置，ret直接将pop esp;mov eip,esp;
 * plt与got
   * PLT:CODE
