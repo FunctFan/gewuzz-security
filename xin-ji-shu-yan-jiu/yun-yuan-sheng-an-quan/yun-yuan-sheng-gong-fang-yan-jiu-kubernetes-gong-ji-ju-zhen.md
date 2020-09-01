@@ -2,7 +2,7 @@
 description: 仿效ATT&CK，微软发布云安全攻击矩阵
 ---
 
-# 【云原生攻防研究】Kubernetes攻击矩阵
+# 云原生攻防研究--Kubernetes攻击矩阵
 
 以下内容引自安全客「 [安全牛](javascript:void%280%29;)」在其「[仿效ATT&CK，微软发布云安全攻击矩阵](https://mp.weixin.qq.com/s?__biz=MjM5Njc3NjM4MA==&mid=2651088712&idx=2&sn=085188e6d5a4fc0838d62346a72736be&chksm=bd14d79b8a635e8d615a9286548a7815dc8911fd2519a692c7ee1fdee8f7d155ef244267e120&mpshare=1&scene=1&srcid=&sharer_sharetime=1592283304049&sharer_shareid=e51105992a2df16a51a17def3d0e3b20&key=d9e86545f3b3a92b57c3e9efc5ee7910b4e3b74ee4a4470f776472ed8bd711c50208d30661fcc957c4d0f27d72265a6f8445e9409dd70ce78416ec9a40eb020ec813b3181e559a6f3f622e4e8ee97e1e&ascene=1&uin=MTQxNTg2Mjc4NA%3D%3D&devicetype=Windows+7+x64&version=6209007b&lang=zh_CN&exportkey=ASVqgrg21YvxB8ZbtUDxGLg%3D&pass_ticket=iZIaOuMZAhHldf%2BBzYvKc6sFYuX3vwOT%2BnMe8f4D%2B1huP5rbCSMtXmaeriA64Pby)」的博文，具体内容已经是精简后的版本：
 
