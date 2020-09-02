@@ -2,7 +2,7 @@
 description: qemu kvm hypervisor
 ---
 
-# 虚拟化技术
+# 虚拟化hypervisor简介
 
 ## Hypervisor
 
