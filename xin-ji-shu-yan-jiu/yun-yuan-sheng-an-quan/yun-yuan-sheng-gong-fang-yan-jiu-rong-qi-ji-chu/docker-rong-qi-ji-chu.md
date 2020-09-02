@@ -343,7 +343,7 @@ Docker Hub有很多官方或其他开发提供的高质量镜像供我们使用�
   Docker是客户－服务器\(C/S\)架构的程序。Docker客户端只需向Docker服务器或守护进程发出请求，服务器或守护进程将完成所有工作并返回结果。Docker提供了一个命令行工具docker以及一整套RESTful API。你可以在同一台宿主机上运行Docker守护进程和客户端，也可以从本地的Docker客户端连接到运行在另一台宿主机上的远程Docker守护进程。下图描绘了Docker的架构：  
 
 
-![](../../../.gitbook/assets/image%20%28110%29.png)
+![](../../../.gitbook/assets/image%20%28111%29.png)
 
 ### docker 启动的调用链
 
@@ -389,10 +389,9 @@ docker daemon\(dockerd\)，一般也会被称为 docker engine。该程序的安
 从Docker 1.11之后，Docker Daemon被分成了多个模块以适应OCI标准。拆分之后，结构分成了以下几个部分。
 
 其中，containerd独立负责容器运行时和生命周期（如创建、启动、停止、中止、信号处理、删除等），其他一些如镜像构建、卷管理、日志等由Docker Daemon的其他模块处理。  
-image  
 
 
-![](//upload-images.jianshu.io/upload_images/8911567-a2909ee9253d3e1a.png?imageMogr2/auto-orient/strip|imageView2/2/w/376/format/webp)
+![](../../../.gitbook/assets/image%20%28110%29.png)
 
 Docker的模块块拥抱了开放标准，希望通过OCI的标准化，容器技术能够有很快的发展。
 
