@@ -343,11 +343,7 @@ Docker Hub有很多官方或其他开发提供的高质量镜像供我们使用�
   Docker是客户－服务器\(C/S\)架构的程序。Docker客户端只需向Docker服务器或守护进程发出请求，服务器或守护进程将完成所有工作并返回结果。Docker提供了一个命令行工具docker以及一整套RESTful API。你可以在同一台宿主机上运行Docker守护进程和客户端，也可以从本地的Docker客户端连接到运行在另一台宿主机上的远程Docker守护进程。下图描绘了Docker的架构：  
 
 
-![](https://img2018.cnblogs.com/blog/1659331/201905/1659331-20190520215016200-318136197.png)
-
-
-
-![&#x4E00;&#x6587;&#x770B;&#x61C2;docker&#x5BB9;&#x5668;&#x6280;&#x672F;&#x67B6;&#x6784;&#x53CA;&#x5176;&#x4E2D;&#x7684;&#x5404;&#x4E2A;&#x6A21;&#x5757;](https://s1.51cto.com/oss/202001/10/fc52c82f8c02c1ee158717f451970411.jpeg)
+![](../../../.gitbook/assets/image%20%28110%29.png)
 
 ### docker 启动的调用链
 
