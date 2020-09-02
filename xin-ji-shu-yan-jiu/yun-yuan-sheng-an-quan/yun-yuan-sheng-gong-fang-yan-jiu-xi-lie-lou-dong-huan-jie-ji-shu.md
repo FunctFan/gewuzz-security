@@ -1,4 +1,4 @@
-# 云原生攻防研究系列：漏洞缓解技术
+# 云原生攻防研究：漏洞缓解技术
 
 {% embed url="https://mp.weixin.qq.com/s/KQyg4Ikp1UOVVvzQ1TBXsQ" %}
 

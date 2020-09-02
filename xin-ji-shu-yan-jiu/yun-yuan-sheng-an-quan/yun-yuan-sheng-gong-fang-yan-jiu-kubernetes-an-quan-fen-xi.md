@@ -1,0 +1,8 @@
+# 云原生攻防研究：Kubernetes安全分析
+
+[https://mp.weixin.qq.com/s?\_\_biz=MzIyODYzNTU2OA==&mid=2247487886&idx=1&sn=41c441850fd373a3eaee9b005096da61&chksm=e84fb751df383e4703a789c44971f973272a0400047e075d02377a2b196e841dbc6d1ce5f46f&mpshare=1&scene=1&srcid=&sharer\_sharetime=1591179580834&sharer\_shareid=e51105992a2df16a51a17def3d0e3b20&key=20a12b5e02faf2389b3565577170ce682d86ce7bf308ade35e41d3d0cc2292ed13c55a211493c386f0f61fab03351557cdf0da04934ff3dffe09f60e1d8a9a4b3d4408f238b46538796f087d2f893d57&ascene=1&uin=MTQxNTg2Mjc4NA%3D%3D&devicetype=Windows+7+x64&version=6209007b&lang=zh\_CN&exportkey=Ad43dbG1Pls7LuK%2FB6HTcbQ%3D&pass\_ticket=x8ZcbWfyClTApdtEgQpQDbZQj069dzdkIf6UHj2V56xxU7KGZlO1ERCotSCavOfA](https://mp.weixin.qq.com/s?__biz=MzIyODYzNTU2OA==&mid=2247487886&idx=1&sn=41c441850fd373a3eaee9b005096da61&chksm=e84fb751df383e4703a789c44971f973272a0400047e075d02377a2b196e841dbc6d1ce5f46f&mpshare=1&scene=1&srcid=&sharer_sharetime=1591179580834&sharer_shareid=e51105992a2df16a51a17def3d0e3b20&key=20a12b5e02faf2389b3565577170ce682d86ce7bf308ade35e41d3d0cc2292ed13c55a211493c386f0f61fab03351557cdf0da04934ff3dffe09f60e1d8a9a4b3d4408f238b46538796f087d2f893d57&ascene=1&uin=MTQxNTg2Mjc4NA%3D%3D&devicetype=Windows+7+x64&version=6209007b&lang=zh_CN&exportkey=Ad43dbG1Pls7LuK%2FB6HTcbQ%3D&pass_ticket=x8ZcbWfyClTApdtEgQpQDbZQj069dzdkIf6UHj2V56xxU7KGZlO1ERCotSCavOfA)
+
+
+
+
+
