@@ -1271,7 +1271,7 @@ WebLogic是一个Web漏洞库，其中以反序列化漏洞为代表，后果最
 
 #### 流程
 
-![](../.gitbook/assets/image%20%2859%29.png)
+![](../../.gitbook/assets/image%20%2859%29.png)
 
 #### 使用方法：
 
@@ -1321,7 +1321,7 @@ docker run -d -p 7001:7001 -p 8453:8453 -p 5556:5556 --name weblogic12013jdk7u21
 
 以JDK 7u21配合WebLogic 12.1.3为例，自动搭建效果如下：
 
-![](../.gitbook/assets/image%20%2858%29.png)
+![](../../.gitbook/assets/image%20%2858%29.png)
 
 #### 兼容性测试
 

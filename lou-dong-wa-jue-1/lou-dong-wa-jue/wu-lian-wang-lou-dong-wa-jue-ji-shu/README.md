@@ -16,7 +16,7 @@ description: 工业互联网，物联网，车连网安全
 
 总结的IOT资料 [https://zybuluo.com/H4l0/note/1524758](https://zybuluo.com/H4l0/note/1524758) 密码是1286
 
-![&#x5165;&#x95E8;&#x4E8C;&#x8FDB;&#x5236;&#x6F0F;&#x6D1E;&#x5206;&#x6790;&#x8111;&#x56FE;](../../.gitbook/assets/ru-men-er-jin-zhi-lou-dong-fen-xi-nao-tu-.png)
+![&#x5165;&#x95E8;&#x4E8C;&#x8FDB;&#x5236;&#x6F0F;&#x6D1E;&#x5206;&#x6790;&#x8111;&#x56FE;](../../../.gitbook/assets/ru-men-er-jin-zhi-lou-dong-fen-xi-nao-tu-.png)
 
 ## 分析环境部署参考
 

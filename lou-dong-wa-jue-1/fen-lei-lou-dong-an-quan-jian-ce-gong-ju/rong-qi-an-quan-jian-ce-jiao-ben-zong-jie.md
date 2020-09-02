@@ -131,7 +131,7 @@ which ssh
 
 操作：执行grep CapEff /proc/self/status获得权限值，在其他系统上执行capsh --decode=value将前面获得的值解析为具体权限。例如： 
 
-![](../.gitbook/assets/image%20%28105%29.png)
+![](../../.gitbook/assets/image%20%28105%29.png)
 
 问题：当前容器是否运行在特权模式？ 
 
@@ -154,7 +154,7 @@ which ssh
 操作：有条件的话应该使用nmap探测。还可以先读取/etc/hosts查看容器的IP地址。例如：   
 
 
-![](../.gitbook/assets/image%20%28104%29.png)
+![](../../.gitbook/assets/image%20%28104%29.png)
 
 ```bash
 #!/bin/bash
@@ -187,7 +187,7 @@ cat /etc/hosts
 
 操作：运行Docker Bench for Security项目\[1\]来快速发现安全缺陷。笔者在本地环境下的部分测试结果如下图所示： 
 
-![](../.gitbook/assets/image%20%28103%29.png)
+![](../../.gitbook/assets/image%20%28103%29.png)
 
 问题：哪些用户被允许与Docker Socket交互？ 
 

@@ -18,11 +18,11 @@ description: 熟悉常用的调试命令
 
 ### 内存布局
 
-![](../../.gitbook/assets/image%20%28106%29.png)
+![](../../../.gitbook/assets/image%20%28106%29.png)
 
 进程地址空间从低地址开始依次是代码段\(Text\)、数据段\(Data\)、BSS段、堆、内存映射段\(mmap\)、栈。
 
-![](../../.gitbook/assets/image%20%28107%29.png)
+![](../../../.gitbook/assets/image%20%28107%29.png)
 
  **\[ 注意：BSS段 和 data段的区别是 ，如果一个全局变量没有被初始化（或被初始化为0），那么他就存放在bss段；如果一个全局变量被初始化为非0，那么他就被存放在data段。\]**
 

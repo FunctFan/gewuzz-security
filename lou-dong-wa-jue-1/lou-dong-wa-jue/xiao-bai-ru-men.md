@@ -72,7 +72,7 @@ description: 怎么走进漏洞挖掘的大门，听听大牛怎么说
 
 #### 思维导图
 
-![](../.gitbook/assets/lou-dong-wa-jue-si-lu-.png)
+![](../../.gitbook/assets/lou-dong-wa-jue-si-lu-.png)
 
 ### 二进制0day漏洞挖掘规划：
 

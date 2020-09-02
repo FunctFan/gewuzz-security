@@ -18,13 +18,13 @@ Fuzzing通常由盲fuzzing（blind fuzzing）和导向性fuzzing（guided fuzzin
  **Charlie Miller，**他是第一个成功攻击iPhone, G1 Phone的人，是2018-2011年蝉联4届的Pwn2Own冠军，他提出模糊测试只需要5行python代码，并且运行这5行代码，一定可以找到一些你想要的东西。
 {% endhint %}
 
-![5 lines of python](../../.gitbook/assets/image%20%2816%29.png)
+![5 lines of python](../../../.gitbook/assets/image%20%2816%29.png)
 
 {% hint style="info" %}
  **Laurent Gaffié**，他在SMB协议上出了很多成绩，比如在3秒之内就在打好补丁的MS07-063上找到了一个bug，CVE-2009-3103，CVE-2009-3676,  CVE-2010-0270，CVE-2010-0016,CVE-2010-0017，CVE-2010-0470, CVE-2010-0476,CVE-2010-0477，CVE-2010-2550，CVE-2011-1869等都是他发现的漏洞。并且他将自己的模糊测试的方法称为“Home Made Fuzzer”，从这个名称上就可以看出，fuzzing的代码就是真的很简单。
 {% endhint %}
 
-![Home Made Fuzzer](../../.gitbook/assets/image%20%285%29.png)
+![Home Made Fuzzer](../../../.gitbook/assets/image%20%285%29.png)
 
 看他们说的简单，其实在他们简单的背后蕴藏着重要的挖掘经验和思想在里面，没有功底的人是一下无法领略到其中的真正内涵的，但是你有理由相信：只要你具备了一定的：
 

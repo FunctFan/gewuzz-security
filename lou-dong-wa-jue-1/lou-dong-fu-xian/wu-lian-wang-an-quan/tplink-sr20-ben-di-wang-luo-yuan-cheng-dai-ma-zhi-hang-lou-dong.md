@@ -179,15 +179,15 @@ end
 
 接着在qemu虚拟机中启动tddp程序。
 
-![](../../.gitbook/assets/image%20%28100%29.png)
+![](../../../.gitbook/assets/image%20%28100%29.png)
 
 然后在宿主机中监听1337端口。
 
-![](../../.gitbook/assets/image%20%28102%29.png)
+![](../../../.gitbook/assets/image%20%28102%29.png)
 
 最后执行poc，就可以看到nc连回的结果了，我后面使用pwntools重写了之前的poc，因此这里就不贴出poc了，在后面再给出链接。
 
-![](../../.gitbook/assets/image%20%28101%29.png)
+![](../../../.gitbook/assets/image%20%28101%29.png)
 
 ```python
 #!/usr/bin/python3

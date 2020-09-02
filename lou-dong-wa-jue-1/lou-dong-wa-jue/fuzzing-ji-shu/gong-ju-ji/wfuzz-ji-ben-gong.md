@@ -14,7 +14,7 @@ description: Web application fuzzer
 
 wfuzz本身自带字典：
 
-![](../../../.gitbook/assets/image%20%2810%29.png)
+![](../../../../.gitbook/assets/image%20%2810%29.png)
 
 进入各类目录查看所有的字典文件如下：
 

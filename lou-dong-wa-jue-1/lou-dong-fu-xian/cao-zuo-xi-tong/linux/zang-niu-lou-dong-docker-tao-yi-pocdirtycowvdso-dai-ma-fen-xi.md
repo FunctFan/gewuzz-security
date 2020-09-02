@@ -72,11 +72,11 @@ int main(int argc, char *argv[])
 }
 ```
 
-![](../../../.gitbook/assets/image%20%2824%29.png)
+![](../../../../.gitbook/assets/image%20%2824%29.png)
 
-![](../../../.gitbook/assets/image%20%2823%29.png)
+![](../../../../.gitbook/assets/image%20%2823%29.png)
 
-![](../../../.gitbook/assets/image%20%2820%29.png)
+![](../../../../.gitbook/assets/image%20%2820%29.png)
 
 ## 二 . 函数分析 <a id="&#x4E8C;-&#x51FD;&#x6570;&#x5206;&#x6790;"></a>
 

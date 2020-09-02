@@ -47,7 +47,7 @@ http://10.26.231.203:8983/solr/#/
 
 访问test的配置文件
 
-![](../../.gitbook/assets/image%20%288%29.png)
+![](../../../.gitbook/assets/image%20%288%29.png)
 
 ```text
 http://10.26.231.203:8983/solr/test/config
@@ -74,7 +74,7 @@ http://10.26.231.203:8983/solr/test/config
 注意：图示这2个位置要修改
 {% endhint %}
 
-![](../../.gitbook/assets/image%20%286%29.png)
+![](../../../.gitbook/assets/image%20%286%29.png)
 
 然后就可以进行RCE
 
