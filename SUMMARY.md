@@ -76,6 +76,7 @@
   * [云原生安全](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/README.md)
     * [虚拟化hypervisor简介](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/xu-ni-hua-ji-shu.md)
     * [云原生攻防研究：容器基础](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/yun-yuan-sheng-gong-fang-yan-jiu-rong-qi-ji-chu/README.md)
+      * [Linux内核基础](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/yun-yuan-sheng-gong-fang-yan-jiu-rong-qi-ji-chu/linux-nei-he-ji-chu.md)
       * [Docker容器基础](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/yun-yuan-sheng-gong-fang-yan-jiu-rong-qi-ji-chu/docker-rong-qi-ji-chu.md)
       * [docker之namespace，cgroup与unionFS](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/yun-yuan-sheng-gong-fang-yan-jiu-rong-qi-ji-chu/docker-zhi-namespace-yu-cgroup.md)
       * [Linux内核安全模块之AppArmor](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/yun-yuan-sheng-gong-fang-yan-jiu-rong-qi-ji-chu/linux-nei-he-an-quan-mo-kuai-zhi-apparmor.md)
