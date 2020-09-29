@@ -6,6 +6,13 @@ description: 容器本质+LXC+三大特色
 
 以下内容引自安全客「[JerryWang\_汪子熙](https://www.jianshu.com/u/99b8712e8850)」在其「[Docker技术三大要点：cgroup, namespace和unionFS的理解](https://www.jianshu.com/p/47c4a06a84a4)」的博文，具体内容已经是精简后的版本：
 
+{% hint style="info" %}
+作者：JerryWang\_汪子熙  
+链接：https://www.jianshu.com/p/47c4a06a84a4  
+来源：简书  
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+{% endhint %}
+
 ## 容器本质
 
 Docker其实是容器化技术的具体技术实现之一，采用go语言开发。很多朋友刚接触Docker时，认为它就是一种更轻量级的虚拟机，这种认识其实是错误的，Docker和虚拟机有本质的区别。
@@ -54,40 +61,74 @@ Linux 系统在启动时，roofs 首先会被挂载为只读模式，然后在�
 
 不同的Linux版本，实现unionFS的技术可能不一样，使用命令docker info查看，比如我的机器上实现技术是overlay2：
 
-![](//upload-images.jianshu.io/upload_images/2085791-d80c844f107bc339?imageMogr2/auto-orient/strip|imageView2/2/w/1103/format/webp)
+![](../../../.gitbook/assets/image%20%28119%29.png)
 
 看个实际的例子。
 
 新建两个文件夹abap和java，在里面用touch命名分别创建两个空文件：
 
-![](//upload-images.jianshu.io/upload_images/2085791-a054b5e22862ab3c?imageMogr2/auto-orient/strip|imageView2/2/w/531/format/webp)
+![](../../../.gitbook/assets/image%20%28120%29.png)
 
 新建一个mnt文件夹，用mount命令把abap和java文件夹merge到mnt文件夹下，-t执行文件系统类型为aufs：
 
 sudo mount -t aufs -o dirs=./abap:./java none ./mnt
 
-![](//upload-images.jianshu.io/upload_images/2085791-d27c391626863fa3?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp)
+![](../../../.gitbook/assets/image%20%28118%29.png)
 
 mount完成后，到mnt文件夹下查看，发现了来自abap和java文件夹里总共4个文件：
 
-![](//upload-images.jianshu.io/upload_images/2085791-aa3602e3c38cdb9a?imageMogr2/auto-orient/strip|imageView2/2/w/615/format/webp)
+![](../../../.gitbook/assets/image%20%28117%29.png)
 
 现在我到java文件夹里修改spring，比如加上一行spring is awesome, 然后到mnt文件夹下查看，发现mnt下面的文件内容也自动被更新了。
 
-![](//upload-images.jianshu.io/upload_images/2085791-07ed670b239f6b97?imageMogr2/auto-orient/strip|imageView2/2/w/691/format/webp)
+![](../../../.gitbook/assets/image%20%28121%29.png)
 
-![](//upload-images.jianshu.io/upload_images/2085791-0bf20ac80864ecbb?imageMogr2/auto-orient/strip|imageView2/2/w/762/format/webp)
+![](../../../.gitbook/assets/image%20%28115%29.png)
 
 那么反过来会如何呢？比如我修改mnt文件夹下的aop文件：
 
-![](//upload-images.jianshu.io/upload_images/2085791-bd38e3ae953f051d?imageMogr2/auto-orient/strip|imageView2/2/w/646/format/webp)
+![](../../../.gitbook/assets/image%20%28116%29.png)
 
 而java文件夹下的原始文件没有受到影响：
 
-![](//upload-images.jianshu.io/upload_images/2085791-0ee8a6dd8f7cedc4?imageMogr2/auto-orient/strip|imageView2/2/w/744/format/webp)
+![](../../../.gitbook/assets/image%20%28122%29.png)
 
 实际上这就是Docker容器镜像分层实现的技术基础。如果我们浏览Docker hub，能发现大多数镜像都不是从头开始制作，而是从一些base镜像基础上创建，比如debian基础镜像。
 
-而新镜像就是从基础镜像上一层层叠加新的逻辑构成的。这种分层设计，一个优点就是资源共享。  
+而新镜像就是从基础镜像上一层层叠加新的逻辑构成的。这种分层设计，一个优点就是资源共享。
+
+想象这样一个场景，一台宿主机上运行了100个基于debian base镜像的容器，难道每个容器里都有一份重复的debian拷贝呢？这显然不合理；借助Linux的unionFS，宿主机只需要在磁盘上保存一份base镜像，内存中也只需要加载一份，就能被所有基于这个镜像的容器共享。
+
+当某个容器修改了基础镜像的内容，比如 /bin文件夹下的文件，这时其他容器的/bin文件夹是否会发生变化呢？
+
+根据容器镜像的写时拷贝技术，某个容器对基础镜像的修改会被限制在单个容器内。
+
+这就是我们接下来要学习的容器 Copy-on-Write 特性。
+
+容器镜像由多个镜像层组成，所有镜像层会联合在一起组成一个统一的文件系统。如果不同层中有一个相同路径的文件，比如 /text，上层的 /text 会覆盖下层的 /text，也就是说用户只能访问到上层中的文件 /text。
+
+假设我有如下这个dockerfile：
+
+FROM debian
+
+RUN apt-get install emacs
+
+RUN apt-get install apache2
+
+CMD \["/bin/bash"\]
+
+执行docker build .看看发生了什么。
+
+![](//upload-images.jianshu.io/upload_images/2085791-cca551302dfac53f?imageMogr2/auto-orient/strip|imageView2/2/w/1118/format/webp)
+
+生成的容器镜像如下：
+
+![](//upload-images.jianshu.io/upload_images/2085791-c8466de5394d2a40?imageMogr2/auto-orient/strip|imageView2/2/w/824/format/webp)
+
+当用docker run启动这个容器时，实际上在镜像的顶部添加了一个新的可写层。这个可写层也叫容器层。
+
+![](//upload-images.jianshu.io/upload_images/2085791-404d1347df2eb15a?imageMogr2/auto-orient/strip|imageView2/2/w/809/format/webp)
+
+容器启动后，其内的应用所有对容器的改动，文件的增删改操作都只会发生在容器层中，对容器层下面的所有只读镜像层没有影响。  
 
 
