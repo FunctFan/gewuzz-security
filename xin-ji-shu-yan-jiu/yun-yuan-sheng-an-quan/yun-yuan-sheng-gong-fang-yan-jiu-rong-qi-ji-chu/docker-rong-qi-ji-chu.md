@@ -61,6 +61,20 @@ Docker CE有三个更新频道，分别为stable、test、nightly，stable是稳
   
 而学习Docker的第一步，从安装Docker运行环境开始，我们以Docker的社区版本（CE）安装为例，Docker社区版本提供了Mac OS，Microsoft Windows和Linux（CentOS，Ubuntu，Fedora，Debian）等操作系统的安装包，同时也支持在云服务器上的安装，比如AWS Cloud。
 
+### 使用官方安装脚本自动安装
+
+安装命令如下：
+
+```text
+curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
+```
+
+也可以使用国内 daocloud 一键安装命令：
+
+```text
+curl -sSL https://get.daocloud.io/docker | sh
+```
+
 ## **在Linux上安装**
 
 在Linux操作系统上的安装，主要以CentOS 7为例，其他Linux系统的发行版本，如Ubuntu，Debian，Fedora等，可以自行查询Docker的官方文档。  
