@@ -38,7 +38,7 @@ ubuntu              12.04               5b117edd0b76        7 months ago        
 
 典型的Linux启动到运行需要两个FS，bootfs + rootfs，如下图：
 
-![Docker&#x955C;&#x50CF;&#x7684;&#x5185;&#x90E8;&#x7ED3;&#x6784;\(&#x56DB;\)](https://s4.51cto.com/images/blog/201711/28/9074aa31f4e98cec2b11b2c62ce815bb.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=)
+![](../../../.gitbook/assets/image%20%28126%29.png)
 
 ### 1、rootfs
 
@@ -54,7 +54,7 @@ ubuntu              12.04               5b117edd0b76        7 months ago        
 
 下面是 CentOS 镜像的 Dockerfile 的内容：
 
-![Docker&#x955C;&#x50CF;&#x7684;&#x5185;&#x90E8;&#x7ED3;&#x6784;\(&#x56DB;\)](https://s4.51cto.com/images/blog/201711/27/23115d7a22cd1cf9e8e1364a6adcaa07.jpg?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=)
+![](../../../.gitbook/assets/image%20%28125%29.png)
 
 ```text
 FROM scratch
@@ -124,7 +124,7 @@ CMD ["/bin/bash"]              4.容器启动时运行 bash。
 
 构建过程如下图所示：
 
-![](../../../.gitbook/assets/image%20%28125%29.png)
+![](../../../.gitbook/assets/image%20%28127%29.png)
 
   
 可以看到，新镜像是从 base 镜像一层一层叠加生成的。每安装一个软件，就在现有镜像的基础上增加一层。
