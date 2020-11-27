@@ -78,6 +78,7 @@
     * [云原生攻防研究：容器基础](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/yun-yuan-sheng-gong-fang-yan-jiu-rong-qi-ji-chu/README.md)
       * [Linux内核基础](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/yun-yuan-sheng-gong-fang-yan-jiu-rong-qi-ji-chu/linux-nei-he-ji-chu.md)
       * [Docker容器基础](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/yun-yuan-sheng-gong-fang-yan-jiu-rong-qi-ji-chu/docker-rong-qi-ji-chu.md)
+      * [Docker镜像的内部结构\(四\)](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/yun-yuan-sheng-gong-fang-yan-jiu-rong-qi-ji-chu/docker-jing-xiang-de-nei-bu-jie-gou-si.md)
       * [docker之namespace，cgroup与unionFS](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/yun-yuan-sheng-gong-fang-yan-jiu-rong-qi-ji-chu/docker-zhi-namespace-yu-cgroup.md)
       * [Linux内核安全模块之AppArmor](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/yun-yuan-sheng-gong-fang-yan-jiu-rong-qi-ji-chu/linux-nei-he-an-quan-mo-kuai-zhi-apparmor.md)
       * [Linux沙箱之seccomp](xin-ji-shu-yan-jiu/yun-yuan-sheng-an-quan/yun-yuan-sheng-gong-fang-yan-jiu-rong-qi-ji-chu/linux-sha-xiang-zhi-seccomp.md)
