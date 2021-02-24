@@ -61,6 +61,85 @@ Docker CE有三个更新频道，分别为stable、test、nightly，stable是稳
   
 而学习Docker的第一步，从安装Docker运行环境开始，我们以Docker的社区版本（CE）安装为例，Docker社区版本提供了Mac OS，Microsoft Windows和Linux（CentOS，Ubuntu，Fedora，Debian）等操作系统的安装包，同时也支持在云服务器上的安装，比如AWS Cloud。
 
+### SUSE12安装docker
+
+由于内网隔离，需要离线安装docker。
+
+步骤如下：
+
+互联网下载docker和docker-compose
+
+docker下载地址：[https://download.docker.com/linux/static/stable/x86\_64/](https://download.docker.com/linux/static/stable/x86_64/)
+
+docker-compose下载地址：[https://github.com/docker/compose/releases](https://github.com/docker/compose/releases)
+
+选择的版本分别为 docker-18.06.3-ce.tgz 和 docker-compose-Linux-x86\_64
+
+将下列代码保存为setDockerEnv.sh文件。
+
+```bash
+#!/bin/bash
+set -x
+
+#  本脚本为127.0.0.1执行
+
+#setup
+tar zxf  docker-18.06.3-ce.tgz && mv docker/* /usr/bin/ && rm -rf docker/
+
+#systemd config
+cat >/etc/systemd/system/docker.service <<-EOF
+[Unit]
+Description=Docker Application Container Engine
+Documentation=https://docs.docker.com
+After=network-online.target firewalld.service
+Wants=network-online.target
+
+[Service]
+Type=notify
+# the default is not to use systemd for cgroups because the delegate issues still
+# exists and systemd currently does not support the cgroup feature set required
+# for containers run by docker
+ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix://var/run/docker.sock
+ExecReload=/bin/kill -s HUP $MAINPID
+# Having non-zero Limit*s causes performance problems due to accounting overhead
+# in the kernel. We recommend using cgroups to do container-local accounting.
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+# Uncomment TasksMax if your systemd version supports it.
+# Only systemd 226 and above support this version.
+#TasksMax=infinity
+TimeoutStartSec=0
+# set delegate yes so that systemd does not reset the cgroups of docker containers
+Delegate=yes
+# kill only the docker process, not all processes in the cgroup
+KillMode=process
+# restart the docker process if it exits prematurely
+Restart=on-failure
+StartLimitBurst=3
+StartLimitInterval=60s
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+#start
+chmod +x /etc/systemd/system/docker.service
+systemctl daemon-reload && systemctl start docker && systemctl enable docker.service
+
+#testing
+systemctl status docker && docker -v
+
+# 安装docker-compose
+chmod 777 docker-compose-Linux-x86_64
+
+sudo mv docker-compose-Linux-x86_64 /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+docker-compose -v
+```
+
 ### 使用官方安装脚本自动安装
 
 安装命令如下：
