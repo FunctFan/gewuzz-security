@@ -31,6 +31,7 @@
   * [端口服务探测](shen-tou-ce-shi/duan-kou-fu-wu-tan-ce.md)
   * [边界突破](shen-tou-ce-shi/bian-jie-tu-po.md)
   * [内网穿透](shen-tou-ce-shi/nei-wang-chuan-tou.md)
+  * [容器与K8S安全测试](shen-tou-ce-shi/rong-qi-yu-k8s-an-quan-ce-shi.md)
 * [漏洞挖掘](lou-dong-wa-jue-1/README.md)
   * [web类框架研究报告](lou-dong-wa-jue-1/lou-dong-fen-lei-yan-jiu-bao-gao/README.md)
     * [WebLogic安全研究报告](lou-dong-wa-jue-1/lou-dong-fen-lei-yan-jiu-bao-gao/weblogic-an-quan-yan-jiu-bao-gao.md)
