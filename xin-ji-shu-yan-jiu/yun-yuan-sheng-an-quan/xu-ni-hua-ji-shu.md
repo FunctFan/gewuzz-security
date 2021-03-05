@@ -22,14 +22,14 @@ Openstack不会直接控制qemu-kvm，它会用一个叫libvirt的库去间接�
 
 ## KVM-QEMU
 
-**Qemu 将KVM 整合进来，通过 ioctl 调用/dev/kvm 接口，将有关CPU 指令的部分交由内核模块来做。kvm 负责 cpu 虚拟化+内存虚拟化，实现了 cpu 和内存的虚拟化，但kvm不能模拟其他设备。qemu 模拟 IO 设备（网卡，磁盘等），kvm 加上 qemu 之后就能实现真正意义上服务器虚拟化。因为用到了上面两个东西，所以称之为qemu-kvm。 Qemu 模拟其他的硬件，如 Network, Disk，同样会影响这些设备的性能，于是又产生了pass through 半虚拟化设备virtio\_blk, virtio\_net，提高设备性能。**  
+Qemu 将KVM 整合进来，通过 ioctl 调用/dev/kvm 接口，将有关CPU 指令的部分交由内核模块来做。kvm 负责 cpu 虚拟化+内存虚拟化，实现了 cpu 和内存的虚拟化，但kvm不能模拟其他设备。qemu 模拟 IO 设备（网卡，磁盘等），kvm 加上 qemu 之后就能实现真正意义上服务器虚拟化。因为用到了上面两个东西，所以称之为qemu-kvm。 Qemu 模拟其他的硬件，如 Network, Disk，同样会影响这些设备的性能，于是又产生了pass through 半虚拟化设备virtio\_blk, virtio\_net，提高设备性能。  
 
 
 ![](../../.gitbook/assets/image%20%28109%29.png)
 
 ## LIBVIRT
 
-**Libvirt 是管理虚拟机和其他虚拟化功能，比如存储管理，网络管理的软件集合。它包括一个API 库，一个守护程序（libvirtd）和一个命令行工具（virsh）；libvirt 本身构建于一种抽象的概念之上。它为受支持的虚拟机监控程序实现的常用功能提供通用的 API。 libvirt 的主要目标是为各种虚拟化工具提供一套方便、可靠的编程接口，用一种单一的方式管理多种不同的虚拟化提供方式。**
+Libvirt 是管理虚拟机和其他虚拟化功能，比如存储管理，网络管理的软件集合。它包括一个API 库，一个守护程序（libvirtd）和一个命令行工具（virsh）；libvirt 本身构建于一种抽象的概念之上。它为受支持的虚拟机监控程序实现的常用功能提供通用的 API。 libvirt 的主要目标是为各种虚拟化工具提供一套方便、可靠的编程接口，用一种单一的方式管理多种不同的虚拟化提供方式。
 
 ## QEMU-KVM
 

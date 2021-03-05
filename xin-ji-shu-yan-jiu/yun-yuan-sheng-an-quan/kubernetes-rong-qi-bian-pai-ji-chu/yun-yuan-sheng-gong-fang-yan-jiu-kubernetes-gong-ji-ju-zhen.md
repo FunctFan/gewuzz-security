@@ -10,7 +10,7 @@ description: 仿效ATT&CK，微软发布云安全攻击矩阵
 
 安全业界近来非常流行用ATT&CK框架设计知识库框架或威胁建模，最近微软也发布了一个开源云编排框架Kubernetes的攻击矩阵。（下图）
 
-![](../../.gitbook/assets/image%20%2855%29.png)
+![](../../../.gitbook/assets/image%20%2855%29.png)
 
 微软希望通过这个矩阵帮助组织识别针对Kubernetes的各种安全威胁的防御能力差距，因为Kubernetes已成长为管理容器化应用程序的全球最受欢迎的开源系统之一。
 

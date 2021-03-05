@@ -38,7 +38,7 @@ ubuntu              12.04               5b117edd0b76        7 months ago        
 
 典型的Linux启动到运行需要两个FS，bootfs + rootfs，如下图：
 
-![](../../../.gitbook/assets/image%20%28126%29.png)
+![](../../../../.gitbook/assets/image%20%28126%29.png)
 
 ### 1、rootfs
 
@@ -54,7 +54,7 @@ ubuntu              12.04               5b117edd0b76        7 months ago        
 
 下面是 CentOS 镜像的 Dockerfile 的内容：
 
-![](../../../.gitbook/assets/image%20%28125%29.png)
+![](../../../../.gitbook/assets/image%20%28125%29.png)
 
 ```text
 FROM scratch
@@ -85,7 +85,7 @@ rootfs \(root file system\) 包含的就是典型 Linux 系统中的 /dev, /proc
   
 上图 Debian 和 BusyBox（一种嵌入式 Linux）上层提供各自的 rootfs，底层共用 Docker Host 的 kernel。
 
-![](../../../.gitbook/assets/image%20%28124%29.png)
+![](../../../../.gitbook/assets/image%20%28124%29.png)
 
 这里需要说明的是：
 
@@ -124,7 +124,7 @@ CMD ["/bin/bash"]              4.容器启动时运行 bash。
 
 构建过程如下图所示：
 
-![](../../../.gitbook/assets/image%20%28127%29.png)
+![](../../../../.gitbook/assets/image%20%28127%29.png)
 
   
 可以看到，新镜像是从 base 镜像一层一层叠加生成的。每安装一个软件，就在现有镜像的基础上增加一层。
@@ -151,7 +151,7 @@ CMD ["/bin/bash"]              4.容器启动时运行 bash。
 
 典型的Linux在启动后，首先将 rootfs 置为 readonly, 进行一系列检查, 然后将其切换为 “readwrite” 供用户使用。在docker中，起初也是将 rootfs 以readonly方式加载并检查，然而接下来利用 union mount 的将一个 readwrite 文件系统挂载在 readonly 的rootfs之上，并且允许再次将下层的 file system设定为readonly 并且向上叠加, 这样一组readonly和一个writeable的结构构成一个container的运行目录, 每一个被称作一个Layer。如下图所示。
 
-![](../../../.gitbook/assets/image%20%28123%29.png)
+![](../../../../.gitbook/assets/image%20%28123%29.png)
 
   
 所有对容器的改动，无论添加、删除、还是修改文件都只会发生在容器层中。只有容器层是可写的，容器层下面的所有镜像层都是只读的。
