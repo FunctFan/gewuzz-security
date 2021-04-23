@@ -26,6 +26,8 @@
     * [XXE爱之初印象](java-an-quan/xxe-lou-dong/xxe-ai-zhi-chu-yin-xiang.md)
     * [XXE漏洞写法及防御](java-an-quan/xxe-lou-dong/xxe-lou-dong-xie-fa-ji-fang-yu.md)
     * [XXExploiter工具](java-an-quan/xxe-lou-dong/xxexploiter-gong-ju.md)
+* [web安全](web-an-quan/README.md)
+  * [一句话木马](web-an-quan/yi-ju-hua-mu-ma.md)
 * [渗透测试](shen-tou-ce-shi/README.md)
   * [网络资产收集](shen-tou-ce-shi/wang-luo-zi-chan-shou-ji.md)
   * [端口服务探测](shen-tou-ce-shi/duan-kou-fu-wu-tan-ce.md)
