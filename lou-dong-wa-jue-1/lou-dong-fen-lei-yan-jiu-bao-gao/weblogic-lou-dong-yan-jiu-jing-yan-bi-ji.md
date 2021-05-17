@@ -24,6 +24,8 @@
 
 如果一个类在readObject方法中，自己私自调用ObjectInputStream去执行反序列化操作而不是用weblogic提供的FilterInputStream执行反序列化操作，这样的话会导致weblogic的黑名单失效。这也就是反序列化中的反序列化漏洞，这种漏洞在weblogic中挺常见的。
 
+7.光复现还不够，缺乏的是总结思路，知道他是怎么修复的
+
 
 
 
