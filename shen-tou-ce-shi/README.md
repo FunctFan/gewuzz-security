@@ -4,6 +4,8 @@ description: 渗透测试那些事儿
 
 # 渗透测试
 
+#### [https://mp.weixin.qq.com/s/8N-JDi0G71EaJJ0YBNJyjQ](https://mp.weixin.qq.com/s/8N-JDi0G71EaJJ0YBNJyjQ)
+
 #### 1.当我们拿到一个网站的域名或者IP的时候。最先要做的是信息收集。
 
 得到域名后查IP，推荐使用[站长工具](https://whois.chinaz.com/)，选择whois查询和IP反查询，通过ping该域名查看IP。
