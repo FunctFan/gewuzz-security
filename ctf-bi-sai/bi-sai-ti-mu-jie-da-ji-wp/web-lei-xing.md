@@ -2,7 +2,7 @@
 description: 此分类记录web类型题目解答wp
 ---
 
-# web类型
+# xctf-攻防世界新手练习区web
 
 题目1：view\_source
 
