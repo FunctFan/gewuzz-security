@@ -76,6 +76,8 @@
     * [物联网安全](lou-dong-wa-jue-1/lou-dong-fu-xian/wu-lian-wang-an-quan/README.md)
       * [TP-Link SR20 本地网络远程代码执行漏洞](lou-dong-wa-jue-1/lou-dong-fu-xian/wu-lian-wang-an-quan/tplink-sr20-ben-di-wang-luo-yuan-cheng-dai-ma-zhi-hang-lou-dong.md)
 * [CTF比赛](ctf-bi-sai/README.md)
+  * [比赛题目解答及wp](ctf-bi-sai/bi-sai-ti-mu-jie-da-ji-wp/README.md)
+    * [web类型](ctf-bi-sai/bi-sai-ti-mu-jie-da-ji-wp/web-lei-xing.md)
   * [Exploit利器——Pwntools](ctf-bi-sai/exploit-li-qi-pwntools.md)
 * [新技术研究](xin-ji-shu-yan-jiu/README.md)
   * [区块链](xin-ji-shu-yan-jiu/qu-kuai-lian.md)
